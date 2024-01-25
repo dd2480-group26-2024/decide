@@ -19,3 +19,13 @@ PARAMETERS = {
     "RADIUS2" : 0.0, # Maximum radius in LIC 13
     "AREA2" : 0.0    # Maximum area in LIC 14
 }
+
+POINTS = []
+
+
+
+NUMPOINTS = len(POINTS)
+
+
+
+
