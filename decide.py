@@ -1,4 +1,4 @@
-
+import math
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
@@ -39,3 +39,19 @@ POINTS = []
 
 NUMPOINTS = len(POINTS)
 
+def distance(p1, p2):
+    """ Calculate the Euclidean distance between two points. """
+    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+def LIC7(points, NUMPOINTS, K_PTS, LENGTH1):
+    if NUMPOINTS < 3 or not (1 <= K_PTS <= NUMPOINTS - 2):
+        return False
+
+    for i in range(NUMPOINTS - K_PTS - 1):
+        p1 = points[i]
+        p2 = points[i + K_PTS + 1]
+        distance = distance(p1,p2)
+        if distance > LENGTH1:
+            return True
+
+    return False
