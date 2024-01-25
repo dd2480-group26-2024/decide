@@ -1,3 +1,9 @@
 
 
 
+
+
+NUMPOINTS = len(POINTS)
+
+
+
