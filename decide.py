@@ -37,7 +37,6 @@ POINTS = []
 
 NUMPOINTS = len(POINTS)
 
-
 def circumradius(p1, p2, p3):
     """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
     a = math.dist(p1, p2)
@@ -64,6 +63,16 @@ def calculate_angle(point1, point2, point3):
     angle = math.acos(dot_product/(magnitude_v1*magnitude_v2)) # angle in radians
         
     return angle
+
+def can_fit_in_circle(p1, p2, p3, radius):
+    """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
+    calculated_radius = circumradius(p1, p2, p3)
+    return calculated_radius <= radius
+
+def distance(p1, p2):
+    """ Calculate the Euclidean distance between two points. """
+    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
 
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
@@ -142,10 +151,18 @@ def LIC5():
         ps = ps[1:] # iterate by removing the head of points
     return False
 
-def can_fit_in_circle(p1, p2, p3, radius):
-    """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
-    calculated_radius = circumradius(p1, p2, p3)
-    return calculated_radius <= radius
+def LIC7(points, NUMPOINTS, K_PTS, LENGTH1):
+    if NUMPOINTS < 3 or not (1 <= K_PTS <= NUMPOINTS - 2):
+        return False
+
+    for i in range(NUMPOINTS - K_PTS - 1):
+        p1 = points[i]
+        p2 = points[i + K_PTS + 1]
+        distance = distance(p1,p2)
+        if distance > LENGTH1:
+            return True
+
+    return False
 
 
 def LIC8():
