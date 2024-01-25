@@ -37,9 +37,16 @@ POINTS = []
 
 NUMPOINTS = len(POINTS)
 
-def distance(p1, p2):
-    """ Calculate the Euclidean distance between two points. """
-    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+def circumradius(p1, p2, p3):
+    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
+    a = math.dist(p1, p2)
+    b = math.dist(p2, p3)
+    c = math.dist(p3, p1)
+    area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    radius = a * b * c / area
+    return radius
+
 
 def calculate_distance(point1, point2):
     return math.sqrt((point1[0]-point2[0])**2 + (point1[1]-point2[1])**2)
@@ -136,7 +143,11 @@ def LIC5():
     return False
 
 def can_fit_in_circle(p1, p2, p3, radius):
-    """ Check if three points can fit in a circle of given radius. """
+    """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
+    calculated_radius = circumradius(p1, p2, p3)
+    return calculated_radius <= radius
+
+
 
 def LIC8(points, NUMPOINTS, A_PTS, B_PTS, RADIUS1):
     if NUMPOINTS < 5 or A_PTS + B_PTS > NUMPOINTS - 3 or A_PTS<1 or B_PTS<1:
