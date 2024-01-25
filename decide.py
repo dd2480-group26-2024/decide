@@ -1,3 +1,6 @@
+
+PUV = [True for _ in range(15)]
+
 # 0 = NOTUSED 
 # 1 = ANDD 
 # 2 = ORR
@@ -35,7 +38,4 @@ POINTS = []
 
 
 NUMPOINTS = len(POINTS)
-
-
-
 
