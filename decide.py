@@ -1,3 +1,13 @@
+# 0 = NOTUSED 
+# 1 = ANDD 
+# 2 = ORR
+LCM = []
+for row in range(14):    
+    a = []
+    for column in range(14):   
+        a.append(int(0))
+    LCM.append(a)
+
 PARAMETERS = {
     "LENGTH1" : 0.0, # Length in LICs 0 , 7 , 12
     "RADIUS1" : 0.0, # Radius in LICs 1 , 8 , 13
