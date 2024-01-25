@@ -1,6 +1,4 @@
 import math
-import numpy as np
-
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
@@ -77,9 +75,8 @@ def distance(p1, p2):
 
 def distance_point_to_line(point, line_start, line_end):
     """Calculates the distance from a point to a line defined by two points."""
-
-    num = np.abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
-    den = np.linalg.norm(np.array(line_end) - np.array(line_start))
+    num = abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
+    den = math.sqrt((line_end[0] - line_start[0])**2 + (line_end[1] - line_start[1])**2)
     return num / den
 
 
