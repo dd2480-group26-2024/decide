@@ -1,4 +1,4 @@
-
+import numpy as np
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
@@ -39,3 +39,24 @@ POINTS = []
 
 NUMPOINTS = len(POINTS)
 
+
+def distance_point_to_line(point, line_start, line_end):
+    """Calculates the distance from a point to a line defined by two points."""
+    
+    num = np.abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
+    den = np.linalg.norm(np.array(line_end) - np.array(line_start))
+    return num / den
+
+def LIC6(points, NUMPOINTS, N_PTS, DIST):
+    if NUMPOINTS < 3 or N_PTS < 3 or N_PTS > NUMPOINTS:
+        return False
+
+    for i in range(NUMPOINTS - N_PTS + 1):
+        subset = points[i:i + N_PTS]
+        line_start, line_end = subset[0], subset[-1]
+
+        for point in subset:
+            if distance_point_to_line(point, line_start, line_end) > DIST:
+                return True
+
+    return False
