@@ -1,3 +1,9 @@
 
 POINTS = []
 
+
+
+NUMPOINTS = len(POINTS)
+
+
+
