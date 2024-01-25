@@ -1,4 +1,4 @@
-
+import math
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
@@ -57,6 +57,7 @@ def calculate_angle(point1, point2, point3):
     return angle
 
 def LIC0():
+    assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
     for i in range(NUMPOINTS-1):
         if calculate_distance(POINTS[i], POINTS[i+1]) > PARAMETERS["LENGTH1"]:
             return True
