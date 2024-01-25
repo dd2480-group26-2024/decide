@@ -1,4 +1,5 @@
 import math
+import itertools
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
@@ -58,12 +59,14 @@ def calculate_angle(point1, point2, point3):
 
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
+    
     for i in range(NUMPOINTS-1):
         if calculate_distance(POINTS[i], POINTS[i+1]) > PARAMETERS["LENGTH1"]:
             return True
     return False
 
 def LIC1():
+    assert PARAMETERS["RADIUS1"] >= 0, "RADIUS1 < 0"    
     for i in range(NUMPOINTS-2):
         distances = [calculate_distance(point1, point2) for (point1, point2) in itertools.combinations([POINTS[i],POINTS[i+1],POINTS[i+2]], 2)]
         if any(distance > 2 * PARAMETERS["RADIUS1"] for distance in distances):
@@ -71,6 +74,7 @@ def LIC1():
     return False
 
 def LIC2():
+    assert 0 <= PARAMETERS["EPSILON"] and PARAMETERS["EPSILON"] < math.pi, "EPSILON less than 0 or >= pi"
     for i in range(NUMPOINTS-2):
         if POINTS[i] == POINTS[i+1] or POINTS[i+2] == POINTS[i+1]:
             continue
