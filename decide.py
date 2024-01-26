@@ -68,6 +68,21 @@ def calculate_angle(point1, point2, point3):
         
     return angle
 
+def circumradius(p1, p2, p3):
+    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
+    a = math.dist(p1, p2)
+    b = math.dist(p2, p3)
+    c = math.dist(p3, p1)
+    area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    radius = a * b * c / area
+    return radius
+
+
+def can_fit_in_circle(p1, p2, p3, radius):
+    """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
+    calculated_radius = circumradius(p1, p2, p3)
+    return calculated_radius <= radius  
+  
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
     for i in range(NUMPOINTS-1):
@@ -90,6 +105,7 @@ def LIC2():
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
     return False
+
 
   
 def LIC6():
@@ -117,3 +133,17 @@ def LIC7():
           return True
 
   return False
+
+def LIC8():
+   
+    
+    if PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
+        return False
+    for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
+        p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
+        if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
+            return True
+
+    return False
