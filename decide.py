@@ -43,7 +43,7 @@ def distance(p1, p2):
     """ Calculate the Euclidean distance between two points. """
     return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
-def LIC7(points, NUMPOINTS, K_PTS, LENGTH1):
+def LIC7(points=POINTS, NUMPOINTS=NUMPOINTS, K_PTS=PARAMETERS["K_PTS"], LENGTH1=PARAMETERS['LENGTH1']):
     if NUMPOINTS < 3 or not (1 <= K_PTS <= NUMPOINTS - 2):
         return False
 
