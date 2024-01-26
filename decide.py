@@ -74,6 +74,8 @@ def circumradius(p1, p2, p3):
     b = math.dist(p2, p3)
     c = math.dist(p3, p1)
     area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    if area == 0:
+        return max(a,b,c)/2
     radius = a * b * c / area
     return radius
 
@@ -105,8 +107,6 @@ def LIC2():
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
     return False
-
-
   
 def LIC6():
     if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
@@ -135,9 +135,8 @@ def LIC7():
   return False
 
 def LIC8():
-   
     
-    if PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
+    if NUMPOINTS < 5 or PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
         return False
     for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
         p1 = POINTS[i]
