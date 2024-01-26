@@ -80,18 +80,17 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
-    return Falses
+    return False
 
-  
-def LIC7(points=POINTS, NUMPOINTS=NUMPOINTS, K_PTS=PARAMETERS["K_PTS"], LENGTH1=PARAMETERS['LENGTH1']):
-  if NUMPOINTS < 3 or not (1 <= K_PTS <= NUMPOINTS - 2):
+def LIC7():
+  if NUMPOINTS < 3 or not (1 <= PARAMETERS["K_PTS"] <= NUMPOINTS - 2):
       return False
 
-  for i in range(NUMPOINTS - K_PTS - 1):
-      p1 = points[i]
-      p2 = points[i + K_PTS + 1]
+  for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
+      p1 = POINTS[i]
+      p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
       distance = calculate_distance(p1,p2)
-      if distance > LENGTH1:
+      if distance > PARAMETERS['LENGTH1']:
           return True
 
   return False
