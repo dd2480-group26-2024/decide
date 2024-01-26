@@ -64,6 +64,18 @@ def calculate_angle(point1, point2, point3):
         
     return angle
 
+def circumradius(p1, p2, p3):
+    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
+    a = math.dist(p1, p2)
+    b = math.dist(p2, p3)
+    c = math.dist(p3, p1)
+    area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    if area == 0:
+        return max(a,b,c)/2
+    radius = a * b * c / area
+    return radius
+
+
 def can_fit_in_circle(p1, p2, p3, radius):
     """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
     calculated_radius = circumradius(p1, p2, p3)
@@ -189,9 +201,8 @@ def LIC7():
 
 
 def LIC8():
-   
     
-    if PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
+    if NUMPOINTS < 5 or PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
         return False
     for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
         p1 = POINTS[i]

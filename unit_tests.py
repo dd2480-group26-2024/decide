@@ -88,7 +88,37 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS['DIST'] = 0.5
         self.assertFalse(decide.LIC6())
 
+    def test_LIC8_not_satisfied(self):
+        """ Test LIC8 a triangle"""
+        # Setup for triangle
+        decide.POINTS = [[0.0, 0.0],[0.0, 0.0], [3.0, 0.0],[0.0, 0.0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 2
+        result = decide.LIC8()
 
+        self.assertFalse(result)
+        
+    def test_LIC8_satisfied(self):
+        """ Test LIC8 a triangle"""
+        decide.POINTS = [[0.0, 0.0],[0.0, 0.0], [3.0, 0.0],[0.0, 0.0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 1.5
+        result = decide.LIC8()
+        self.assertTrue(result)
+
+    def test_LIC8_not_satisfied(self):
+            """ Test LIC8 on a straght line"""
+            decide.POINTS = [[1.0, 0.0],[0.0, 0.0], [3.0, 0.0],[4.0, 0.0], [0, 0]]
+            decide.NUMPOINTS = len(decide.POINTS)
+            decide.PARAMETERS['A_PTS'] = 1
+            decide.PARAMETERS['B_PTS'] = 1
+            decide.PARAMETERS['RADIUS1'] = 2
+            result = decide.LIC8()
+            self.assertFalse(result)
 
 if __name__ == '__main__':
     unittest.main()
