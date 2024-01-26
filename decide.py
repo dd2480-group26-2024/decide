@@ -88,20 +88,19 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
-    return Falses
+    return False
   
   
   
-def LIC6(points=POINTS, NUMPOINTS=NUMPOINTS, N_PTS=PARAMETERS['N_PTS'], DIST=PARAMETERS['DIST']):
-    if NUMPOINTS < 3 or N_PTS < 3 or N_PTS > NUMPOINTS:
+def LIC6():
+    if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
         return False
 
-    for i in range(NUMPOINTS - N_PTS + 1):
-        subset = points[i:i + N_PTS]
+    for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
+        subset = POINTS[i:i + PARAMETERS['N_PTS']]
         line_start, line_end = subset[0], subset[-1]
 
         for point in subset:
-            if distance_point_to_line(point, line_start, line_end) > DIST:
+            if distance_point_to_line(point, line_start, line_end) > PARAMETERS['DIST']:
                 return True
-
     return False
