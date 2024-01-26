@@ -149,7 +149,7 @@ def can_fit_in_circle(p1, p2, p3, radius):
 
 
 
-def LIC8(points, NUMPOINTS, A_PTS, B_PTS, RADIUS1):
+def LIC8(points=POINTS, NUMPOINTS=NUMPOINTS, A_PTS=PARAMETERS["A_PTS"], B_PTS=PARAMETERS["B_PTS"], RADIUS1=PARAMETERS["RADIUS1"]):
     if NUMPOINTS < 5 or A_PTS + B_PTS > NUMPOINTS - 3 or A_PTS<1 or B_PTS<1:
         return False
 
