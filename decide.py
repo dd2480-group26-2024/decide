@@ -49,8 +49,49 @@ def distance_point_to_line(point, line_start, line_end):
     num = abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
     den = math.sqrt((line_end[0] - line_start[0])**2 + (line_end[1] - line_start[1])**2)
     return num / den
+  
+def calculate_distance(point1, point2):
+    return math.sqrt((point1[0]-point2[0])**2 + (point1[1]-point2[1])**2)
 
+def calculate_angle(point1, point2, point3):
+    # create the vectors whose angle we want
+    vector1 = (point1[0] - point2[0], point1[1] - point2[1]) 
+    vector2 = (point3[0] - point2[0], point3[1] - point2[1])
+    
+    # The dot product formula says v1 dot v2 = |v1||v2|*cos(theta), where theta is the angle and v1 and v2 are the vectors
+    # So cos(theta) = v1 dot v2 / (|v1||v2|) and theta = arccos (v1 dot v2 / (|v1||v2|))
+    dot_product = vector1[0]*vector2[0] + vector1[1]*vector2[1]
+    magnitude_v1 = math.sqrt(vector1[0]**2 + vector1[1]**2)
+    magnitude_v2 = math.sqrt(vector2[0]**2 + vector2[1]**2)
+    angle = math.acos(dot_product/(magnitude_v1*magnitude_v2)) # angle in radians
+        
+    return angle
 
+def LIC0():
+    assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
+    for i in range(NUMPOINTS-1):
+        if calculate_distance(POINTS[i], POINTS[i+1]) > PARAMETERS["LENGTH1"]:
+            return True
+    return False
+
+def LIC1():
+    for i in range(NUMPOINTS-2):
+        distances = [calculate_distance(point1, point2) for (point1, point2) in itertools.combinations([POINTS[i],POINTS[i+1],POINTS[i+2]], 2)]
+        if any(distance > 2 * PARAMETERS["RADIUS1"] for distance in distances):
+           return True # If any of the pairwise distances are more than 2*RADIUS1, they cannot be contained in the circle
+    return False
+
+def LIC2():
+    for i in range(NUMPOINTS-2):
+        if POINTS[i] == POINTS[i+1] or POINTS[i+2] == POINTS[i+1]:
+            continue
+        angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
+        if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
+            return True
+    return Falses
+  
+  
+  
 def LIC6(points=POINTS, NUMPOINTS=NUMPOINTS, N_PTS=PARAMETERS['N_PTS'], DIST=PARAMETERS['DIST']):
     if NUMPOINTS < 3 or N_PTS < 3 or N_PTS > NUMPOINTS:
         return False
