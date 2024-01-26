@@ -39,6 +39,18 @@ POINTS = []
 
 NUMPOINTS = len(POINTS)
 
+
+
+def distance_point_to_line(point, line_start, line_end):
+    """Calculates the distance from a point to a line defined by two points."""
+    
+    if line_start == line_end:
+        return math.sqrt((point[0] - line_start[0])**2 + (point[1] - line_start[1])**2)
+    
+    num = abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
+    den = math.sqrt((line_end[0] - line_start[0])**2 + (line_end[1] - line_start[1])**2)
+    return num / den
+  
 def calculate_distance(point1, point2):
     return math.sqrt((point1[0]-point2[0])**2 + (point1[1]-point2[1])**2)
 
@@ -56,6 +68,23 @@ def calculate_angle(point1, point2, point3):
         
     return angle
 
+def circumradius(p1, p2, p3):
+    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
+    a = math.dist(p1, p2)
+    b = math.dist(p2, p3)
+    c = math.dist(p3, p1)
+    area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    if area == 0:
+        return max(a,b,c)/2
+    radius = a * b * c / area
+    return radius
+
+
+def can_fit_in_circle(p1, p2, p3, radius):
+    """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
+    calculated_radius = circumradius(p1, p2, p3)
+    return calculated_radius <= radius  
+  
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
     for i in range(NUMPOINTS-1):
@@ -77,6 +106,7 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
+
     return Falses
 
 X = []
@@ -123,4 +153,44 @@ def LIC11():
     for i in range(NUMPOINTS - PARAMETERS["G_PTS"] - 1):
         if X[i + PARAMETERS["G_PTS"] + 1] - X[i] < 0:
             return True
+    return False
+
+  
+def LIC6():
+    if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
+        return False
+
+    for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
+        subset = POINTS[i:i + PARAMETERS['N_PTS']]
+        line_start, line_end = subset[0], subset[-1]
+
+        for point in subset:
+            if distance_point_to_line(point, line_start, line_end) > PARAMETERS['DIST']:
+                return True
+    return False
+
+def LIC7():
+  if NUMPOINTS < 3 or not (1 <= PARAMETERS["K_PTS"] <= NUMPOINTS - 2):
+      return False
+
+  for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
+      p1 = POINTS[i]
+      p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
+      distance = calculate_distance(p1,p2)
+      if distance > PARAMETERS['LENGTH1']:
+          return True
+
+  return False
+
+def LIC8():
+    
+    if NUMPOINTS < 5 or PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
+        return False
+    for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
+        p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
+        if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
+            return True
+
     return False
