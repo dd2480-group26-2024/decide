@@ -210,5 +210,4 @@ def LIC8():
         p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
         if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
             return True
-
     return False
