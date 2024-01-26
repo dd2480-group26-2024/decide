@@ -78,3 +78,41 @@ def LIC2():
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
     return Falses
+
+#There exists at least one set of three
+#consequtive data points that are the
+#vertices of a triangle with area greater
+#than AREA1
+def LIC3():
+    pointsRef = POINTS
+    i = 0; j = 1; k = 2
+    while len(pointsRef) >= 3:
+        # Setup the x and y coordinates of three consequtive points
+        point1 = pointsRef[i]; x1=point1[0]; y1=point1[1]
+        point2 = pointsRef[j]; x2=point2[0]; y2=point2[1]
+        point3 = pointsRef[k]; x3=point3[0]; y3=point3[1]
+        # If the area of the three points is larger than AREA then we're done
+        if (0.5*abs(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))) > PARAMETERS["AREA"]:
+            return True
+        # Continue the iteration
+        pointsRef = pointsRef[1:] # slice to a smaller array
+    return False
+
+#There exists at least one set of Q PTS
+#consecutive data points that lie in more
+#than QUADS quadrants. Where there is ambiguity
+#as to which quadrant contains a given point,
+#priority of decision will be by quadrant number,
+#i.e., I, II, III, IV. For example, the data point
+#(0,0) is in quadrant I, the point (-l,0) is in quadrant II,
+#the point (0,-l) is in quadrant III, the point (0,1)
+#is in quadrant I and the point (1,0) is in quadrant I.
+#(2 ≤ Q PTS ≤ NUMPOINTS), (1 ≤ QUADS ≤ 3)
+def LIC4():
+    return
+
+#There exists at least one set of two consecutive
+#data points, (X[i],Y[i]) and (X[j],Y[j]),such that
+#X[j] - X[i] < 0. (where i = j-1)
+def LIC5():
+    return
