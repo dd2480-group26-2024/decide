@@ -56,6 +56,11 @@ def calculate_angle(point1, point2, point3):
         
     return angle
 
+def calculate_triangle_area(point1, point2, point3):
+    assert 2 == len(point1) == len(point2) == len(point3), "Incorrect format for a point. A point must have 2 coordinates."
+    # Area of a triangle:  |(x2 - x1)(y3 - y1) - (x3 - x1)*(y2 - y1)| / 2
+    return abs((point2[0] - point1[0])*(point3[1] - point1[1]) - (point3[0] - point1[0])*(point2[1] - point1[1])) / 2
+
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
     for i in range(NUMPOINTS-1):
@@ -78,3 +83,22 @@ def LIC2():
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
     return Falses
+    
+def LIC14():
+    if NUMPOINTS < 5:
+        return False
+    assert PARAMETERS["AREA2"] >= 0, "AREA2 must be non-negative"
+    
+    condition_area1 = False
+    condition_area2 = False
+    # Check area of triangle formed by points with index (i, i+E_PTS+1, i+ E_PTS+1 + F_PTS+1)
+    for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
+        area = calculate_triangle_area(POINTS[i], POINTS[i + PARAMETERS["E_PTS"] + 1], POINTS[i + PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] + 2])
+        if PARAMETERS["AREA"] < area:
+            condition_area1 = True
+        if area < PARAMETERS["AREA2"]:
+            condition_area2 = True            
+        if condition_area1 and condition_area2:
+            return True
+    return False      
+
