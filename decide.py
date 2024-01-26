@@ -146,3 +146,22 @@ def LIC8():
             return True
 
     return False
+    
+def LIC13():
+    if(NUMPOINTS < 5):
+        return False
+    assert PARAMETERS["RADIUS2"] >= 0, "RADIUS2 is < 0"
+    
+    condition_radius1 = False
+    condition_radius2 = False
+    
+    # Check circumcircle of triangle formed by points with index (i, i+A_PTS+1, i+ A_PTS+1 + B_PTS+1)
+    for i in range(NUMPOINTS - PARAMETERS["A_PTS"] - PARAMETERS["B_PTS"] - 2):
+        radius = circumradius(POINTS[i], POINTS[i + PARAMETERS["A_PTS"] + 1], POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2])
+        if PARAMETERS["RADIUS1"] < radius:
+            condition_radius1 = True
+        if radius <= PARAMETERS["RADIUS2"]:
+            condition_radius2 = True            
+        if condition_radius1 and condition_radius2:
+            return True
+    return False      
