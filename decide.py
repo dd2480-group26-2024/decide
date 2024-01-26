@@ -39,6 +39,17 @@ POINTS = []
 
 NUMPOINTS = len(POINTS)
 
+
+def distance_point_to_line(point, line_start, line_end):
+    """Calculates the distance from a point to a line defined by two points."""
+    
+    if line_start == line_end:
+        return math.sqrt((point[0] - line_start[0])**2 + (point[1] - line_start[1])**2)
+    
+    num = abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
+    den = math.sqrt((line_end[0] - line_start[0])**2 + (line_end[1] - line_start[1])**2)
+    return num / den
+  
 def calculate_distance(point1, point2):
     return math.sqrt((point1[0]-point2[0])**2 + (point1[1]-point2[1])**2)
 
@@ -77,4 +88,19 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
-    return Falses
+    return False
+  
+  
+  
+def LIC6():
+    if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
+        return False
+
+    for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
+        subset = POINTS[i:i + PARAMETERS['N_PTS']]
+        line_start, line_end = subset[0], subset[-1]
+
+        for point in subset:
+            if distance_point_to_line(point, line_start, line_end) > PARAMETERS['DIST']:
+                return True
+    return False
