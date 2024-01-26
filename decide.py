@@ -79,40 +79,56 @@ def LIC2():
             return True
     return Falses
 
-#There exists at least one set of three
-#consequtive data points that are the
-#vertices of a triangle with area greater
-#than AREA1
 def LIC3():
-    pointsRef = POINTS
-    i = 0; j = 1; k = 2
+    ps = POINTS
     while len(pointsRef) >= 3:
-        # Setup the x and y coordinates of three consequtive points
-        point1 = pointsRef[i]; x1=point1[0]; y1=point1[1]
-        point2 = pointsRef[j]; x2=point2[0]; y2=point2[1]
-        point3 = pointsRef[k]; x3=point3[0]; y3=point3[1]
+        # Setup the x_i and y_i coordinates of three consequtive points
+        point1 = ps[0]; x1=point1[0]; y1=point1[1]
+        point2 = ps[1]; x2=point2[0]; y2=point2[1]
+        point3 = ps[2]; x3=point3[0]; y3=point3[1]
         # If the area of the three points is larger than AREA then we're done
         if (0.5*abs(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))) > PARAMETERS["AREA"]:
             return True
-        # Continue the iteration
-        pointsRef = pointsRef[1:] # slice to a smaller array
+        # Iterate by removing the head of points
+        ps = ps[1:]
     return False
 
-#There exists at least one set of Q PTS
-#consecutive data points that lie in more
-#than QUADS quadrants. Where there is ambiguity
-#as to which quadrant contains a given point,
-#priority of decision will be by quadrant number,
-#i.e., I, II, III, IV. For example, the data point
-#(0,0) is in quadrant I, the point (-l,0) is in quadrant II,
-#the point (0,-l) is in quadrant III, the point (0,1)
-#is in quadrant I and the point (1,0) is in quadrant I.
-#(2 ≤ Q PTS ≤ NUMPOINTS), (1 ≤ QUADS ≤ 3)
 def LIC4():
-    return
+    # Setup variables
+    ps = POINTS
+    quadrant=[False,False,False,False]
+    # Inner helper functions
+    def reset_quadrant():
+        for i in quadrant:
+            i = False
+    # Count how many quadrants have points
+    def count_quads():
+        q = 0
+        for i in quadrant:
+            if i == True:
+                q +=1
+        return q
+   # Main calculation
+    while len(ps) >= PARAMETERS["Q_PTS"]:
+        for p in ps[:PARAMETERS["Q_PTS"]]: # Reduce array to the first Q_PTS elements
+            x=p[0];y=p[1]
+            if x>=0 and y>=0: quadrant[0]=True    # lies in quadrant I
+            elif x<0 and y>=0: quadrant[1]=True   # lies in quadrant II
+            elif x<=0 and y<0: quadrant[2]=True   # lies in quadrant III
+            else: quadrant[3]=True                # lies in quadrant IV
+        if count_quads() > PARAMETERS["QUADS"]:
+            return True
+        reset_quadrant()
+        # Iterate by removing the head of points
+        ps = ps[1:]
+    return False
 
-#There exists at least one set of two consecutive
-#data points, (X[i],Y[i]) and (X[j],Y[j]),such that
-#X[j] - X[i] < 0. (where i = j-1)
 def LIC5():
-    return
+    ps=POINTS
+    while len(ps) >= 2:
+        xi=ps[0][0];
+        xj=ps[1][0];
+        if xj - xi < 0:
+            return True
+        ps = ps[1:] # iterate by removing the head of points
+    return False
