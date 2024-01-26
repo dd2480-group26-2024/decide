@@ -86,7 +86,7 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
-    return Falses
+    return False
 
 def LIC3():
     ps = POINTS
@@ -148,17 +148,16 @@ def can_fit_in_circle(p1, p2, p3, radius):
     return calculated_radius <= radius
 
 
-
-def LIC8(points=POINTS, NUMPOINTS=NUMPOINTS, A_PTS=PARAMETERS["A_PTS"], B_PTS=PARAMETERS["B_PTS"], RADIUS1=PARAMETERS["RADIUS1"]):
-    if NUMPOINTS < 5 or A_PTS + B_PTS > NUMPOINTS - 3 or A_PTS<1 or B_PTS<1:
+def LIC8():
+   
+    
+    if PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
         return False
-
-    for i in range(NUMPOINTS - (A_PTS + B_PTS + 2)):
-        p1 = points[i]
-        p2 = points[i + A_PTS + 1]
-        p3 = points[i + A_PTS + B_PTS + 2]
-
-        if not can_fit_in_circle(p1, p2, p3, RADIUS1):
+    for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
+        p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
+        if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
             return True
 
     return False
