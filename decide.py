@@ -15,7 +15,7 @@ PARAMETERS = {
     "LENGTH1" : 0.0, # Length in LICs 0 , 7 , 12
     "RADIUS1" : 0.0, # Radius in LICs 1 , 8 , 13
     "EPSILON" : 0.0, # Deviation from PI in LICs 2, 9
-    "AREA" : 0.0,    # Area in LICs 3, 10, 14
+    "AREA1" : 0.0,   # Area in LICs 3, 10, 14
     "Q_PTS" : 0,     # No. of consecutive points in LIC 4
     "QUADS" : 0,     # No. of quadrants in LIC 4
     "DIST" : 0.0,    # Distance in LIC 6
@@ -106,7 +106,55 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
+
+    return Falses
+
+X = []
+Y = []
+def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
+    return abs(x1 * (y2-y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) * 0.5 > a1
+
+def LIC9():
+    if NUMPOINTS < 5:
+        return False
+    
+    for i in range(NUMPOINTS - PARAMETERS["C_PTS"] - PARAMETERS["D_PTS"] - 2):
+        first_point_x = X[i]
+        first_point_y = Y[i]
+        second_point_x = X[i + PARAMETERS["C_PTS"] + 1]
+        second_point_y = Y[i + PARAMETERS["C_PTS"] + 1]
+        third_point_x = X[i + PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] + 2]
+        third_point_y = Y[i + PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] + 2]
+
+        angle = (math.degrees((math.atan2(first_point_y - second_point_y, first_point_x - second_point_x) - math.atan2(third_point_y - second_point_y, third_point_x - second_point_x))) + 360) % 360
+
+        if angle < math.degrees(math.pi - PARAMETERS["EPSILON"]) or angle > math.degrees(math.pi + PARAMETERS["EPSILON"]):
+            return True
+        
     return False
+        
+def LIC10():
+    if NUMPOINTS < 5:
+        return False
+    
+    for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
+        first_point = i
+        second_point = i + PARAMETERS["E_PTS"] + 1
+        third_point = second_point + PARAMETERS["F_PTS"] + 1
+
+        if(not triangle_area_vs_area1(X[first_point], Y[first_point], X[second_point], Y[second_point], X[third_point], Y[third_point], PARAMETERS["AREA1"])):
+            return False
+    return True
+
+def LIC11():
+    if NUMPOINTS < 3:
+        return False
+
+    for i in range(NUMPOINTS - PARAMETERS["G_PTS"] - 1):
+        if X[i + PARAMETERS["G_PTS"] + 1] - X[i] < 0:
+            return True
+    return False
+
   
 def LIC6():
     if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
