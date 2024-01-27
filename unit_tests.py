@@ -10,6 +10,7 @@ class TestDecide(unittest.TestCase):
         decide.NUMPOINTS = len(decide.POINTS)
         lic0_result = decide.LIC0()
         self.assertTrue(lic0_result)
+
     def test_LIC8_not_satisfied(self):
         """ Test LIC8 a triangle"""
         # Setup for triangle
@@ -31,6 +32,21 @@ class TestDecide(unittest.TestCase):
         result1 = decide.LIC8()
         self.assertTrue(result1)
  
+    def test_LIC3(self):
+       decide.PARAMETERS['AREA'] = 2
+       decide.POINTS = [[0, 0], [0, 0], [0, 4], [2, 5], [3, 7]]
+       self.assertTrue(decide.LIC3())
+
+    def test_LIC4(self):
+        decide.PARAMETERS['Q_PTS'] = 3
+        decide.PARAMETERS['QUADS'] = 2
+        decide.POINTS = [[0, 0], [-3, -5], [5, -4], [-2, 5], [3, 7]]
+        self.assertTrue(decide.LIC4())
+
+    def test_LIC5(self):
+        decide.POINTS = [[0, 0], [3, -5], [5, -4], [-2, 5], [3, 7]]
+        self.assertTrue(decide.LIC5())
+
     def test_LIC7_satisfied(self):
         """ Test if LIC7 is true when there exists a pair of points more than LENGTH1 units apart """
         decide.POINTS = [[0, 0], [1, 1], [2, 2], [4, 4]]

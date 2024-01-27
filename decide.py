@@ -121,7 +121,7 @@ def LIC2():
 
 def LIC3():
     ps = POINTS
-    while len(pointsRef) >= 3:
+    while len(ps) >= 3:
         # Setup the x_i and y_i coordinates of three consequtive points
         point1 = ps[0]; x1=point1[0]; y1=point1[1]
         point2 = ps[1]; x2=point2[0]; y2=point2[1]
