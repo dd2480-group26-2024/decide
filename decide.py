@@ -115,9 +115,9 @@ def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
     return abs(x1 * (y2-y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) * 0.5 > a1
 
 def LIC9():
-    if NUMPOINTS < 5:
+    if NUMPOINTS < 5 or PARAMETERS["C_PTS"] < 1 or PARAMETERS["D_PTS"] < 1 or PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] > NUMPOINTS - 3:
         return False
-    
+
     for i in range(NUMPOINTS - PARAMETERS["C_PTS"] - PARAMETERS["D_PTS"] - 2):
         first_point_x = X[i]
         first_point_y = Y[i]
@@ -134,7 +134,7 @@ def LIC9():
     return False
         
 def LIC10():
-    if NUMPOINTS < 5:
+    if NUMPOINTS < 5 or PARAMETERS["E_PTS"] < 1 or PARAMETERS["F_PTS"] < 1 or PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] > NUMPOINTS - 3:
         return False
     
     for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
@@ -147,7 +147,7 @@ def LIC10():
     return True
 
 def LIC11():
-    if NUMPOINTS < 3:
+    if NUMPOINTS < 5 or PARAMETERS["G_PTS"] < 1 or PARAMETERS["G_PTS"] > NUMPOINTS - 2:
         return False
 
     for i in range(NUMPOINTS - PARAMETERS["G_PTS"] - 1):
