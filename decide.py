@@ -5,6 +5,7 @@ PUV = [True for _ in range(15)]
 # 1 = ANDD 
 # 2 = ORR
 LCM = []
+
 for row in range(14):    
     a = []
     for column in range(14):   
@@ -194,3 +195,20 @@ def LIC8():
             return True
 
     return False
+
+# 0 = NOTUSED 
+# 1 = ANDD 
+# 2 = ORR
+def generate_PUM(cmv):
+    pum = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+    for i in range(len(cmv)):
+        for j in range(len(cmv)):
+            if LCM[i][j] == 0:
+                pum[i][j] = True
+            elif LCM[i][j] == 1:
+                pum[i][j] = cmv[i] and cmv[j]
+            elif LCM[i][j] == 2:
+                pum[i][j] = cmv[i] or cmv[j]
+
+    return pum

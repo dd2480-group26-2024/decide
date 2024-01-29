@@ -1,7 +1,7 @@
 import unittest
 import decide
 import math
-
+import random
 
 class TestDecide(unittest.TestCase):
     def test_LIC0(self):
@@ -159,6 +159,61 @@ class TestDecide(unittest.TestCase):
             decide.PARAMETERS['RADIUS1'] = 2
             result = decide.LIC8()
             self.assertFalse(result)
+            
+            
+    def test_PUM_orr(self):
+        """Test with all LCM elements as ORR and two random CMV element as True."""
+        cmv = [False for _ in range(15)]
+        random_number_1 = random.randint(0, 6)
+        cmv[random_number_1] = True
+        
+        random_number_2 = random.randint(7, 14)
+        cmv[random_number_2] = True
+
+        decide.LCM = [[2 for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+        generated_outcome = decide.generate_PUM(cmv)
+
+        expected_outcome = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
+        for i in range(len(cmv)):
+            expected_outcome[i][random_number_1] = True
+            expected_outcome[random_number_1][i] = True
+            expected_outcome[i][random_number_2] = True
+            expected_outcome[random_number_2][i] = True
+
+        self.assertListEqual(expected_outcome, generated_outcome)
+
+
+    def test_PUM_andd(self):
+        """Test with all LCM elements as ANDD and two random CMV elements as True."""
+        cmv = [False for _ in range(15)]
+        random_number_1 = random.randint(0, 6)
+        random_number_2 = random.randint(7, 14)
+
+        cmv[random_number_1] = True
+        cmv[random_number_2] = True
+      
+        decide.LCM = [[1 for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+        generated_outcome = decide.generate_PUM(cmv)
+
+        expected_outcome = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
+        for i in [random_number_1, random_number_2]:
+            expected_outcome[i][i] = True
+        expected_outcome[random_number_1][random_number_2] = True
+        expected_outcome[random_number_2][random_number_1] = True
+
+        self.assertListEqual(expected_outcome, generated_outcome)
+
+    def test_PUM_notused(self):
+        """Test with all LCM elements as NOTUSED."""
+        cmv = [False for _ in range(15)]
+        decide.LCM = [[0 for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+        generated_outcome = decide.generate_PUM(cmv)
+        expected_outcome = [[True for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+        self.assertListEqual(expected_outcome, generated_outcome)
 
 if __name__ == '__main__':
     unittest.main()
