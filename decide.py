@@ -194,3 +194,10 @@ def LIC8():
             return True
 
     return False
+
+# temporarily takes in FUV as a variable, will be removed once FUV is merged into main
+def launch(FUV):
+    for i in FUV:
+        if i == False:
+            return False
+    return True
