@@ -25,10 +25,5 @@ class TestDecide(unittest.TestCase):
         lic2_result = decide.LIC2()
         self.assertTrue(lic2_result)
 
-
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
