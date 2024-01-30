@@ -160,5 +160,32 @@ class TestDecide(unittest.TestCase):
             result = decide.LIC8()
             self.assertFalse(result)
 
+    def test_launch_all_false(self):
+        FUV = []
+        for i in range(15):
+            FUV.append(False)
+        self.assertFalse(decide.launch(FUV))
+
+    def test_launch_last_true(self):
+        FUV = []
+        for i in range(14):
+            FUV.append(False)
+        FUV.append(True)
+        self.assertFalse(decide.launch(FUV))
+
+    def test_launch_first_true(self):
+        FUV = []
+        FUV.append(True)
+        for i in range(14):
+            FUV.append(False)
+        self.assertFalse(decide.launch(FUV))
+
+    def test_launch_all_true(self):
+        FUV = []
+        for i in range(15):
+            FUV.append(True)
+        self.assertTrue(decide.launch(FUV))
+
+
 if __name__ == '__main__':
     unittest.main()
