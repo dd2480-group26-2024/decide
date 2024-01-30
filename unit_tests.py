@@ -17,6 +17,13 @@ class TestDecide(unittest.TestCase):
         decide.NUMPOINTS = len(decide.POINTS)
         self.assertFalse(decide.LIC0())
 
+    def test_LIC1_false(self):
+        decide.PARAMETERS["RADIUS1"] = 2
+        decide.POINTS = [[0,3],[0,-1],[1,0]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        lic1_result = decide.LIC1()
+        self.assertFalse(lic1_result)
+
     def test_LIC14_insufficient_points(self):
         decide.POINTS = [[0,2]]
         decide.NUMPOINTS = len(decide.POINTS)
