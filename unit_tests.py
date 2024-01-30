@@ -24,6 +24,14 @@ class TestDecide(unittest.TestCase):
         lic1_result = decide.LIC1()
         self.assertFalse(lic1_result)
 
+    def test_LIC2_false(self):
+        decide.PARAMETERS["EPSILON"] = 0.174532925
+        decide.POINTS = [[-1,0],[0,0],[1,0]] #forms an angle of pi/2
+        decide.NUMPOINTS = len(decide.POINTS)
+        lic2_result = decide.LIC2()
+        self.assertFalse(lic2_result)
+
+
     def test_LIC14_insufficient_points(self):
         decide.POINTS = [[0,2]]
         decide.NUMPOINTS = len(decide.POINTS)
