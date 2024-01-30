@@ -11,6 +11,57 @@ class TestDecide(unittest.TestCase):
         lic0_result = decide.LIC0()
         self.assertTrue(lic0_result)
 
+    def test_LIC14_insufficient_points(self):
+        decide.POINTS = [[0,2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        self.assertFalse(decide.LIC14())
+    
+    
+    def test_LIC14_no_condition_met(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 25
+        decide.PARAMETERS["AREA2"] = 5
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+    
+    def test_LIC14_only_first_condition(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 10
+        decide.PARAMETERS["AREA2"] = 5
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+        
+    def test_LIC14_only_second_condition(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 20
+        decide.PARAMETERS["AREA2"] = 14
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+    
+    def test_LIC14_both_conditions(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 10
+        decide.PARAMETERS["AREA2"] = 15
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertTrue(decide.LIC14())
+
+    def test_LIC14_equal_areas(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 17.5
+        decide.PARAMETERS["AREA2"] = 10
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+
 
     def test_LIC9_True(self):
         decide.NUMPOINTS = 5
@@ -29,6 +80,16 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS["EPSILON"] = math.pi * 4 / 5
         decide.X = [0, 1, 2, 3, 4]
         decide.Y = [0, 1, 3, 1, 0]
+        lic9_result = decide.LIC9()
+        self.assertFalse(lic9_result)
+    
+    def test_LIC9_low_numpoints_False(self):
+        decide.NUMPOINTS = 2
+        decide.PARAMETERS["C_PTS"] = 1
+        decide.PARAMETERS["D_PTS"] = 1
+        decide.PARAMETERS["EPSILON"] = math.pi / 2
+        decide.X = [0, 1, 0, 2, 3]
+        decide.Y = [0, 2, 0, 3, 4]
         lic9_result = decide.LIC9()
         self.assertFalse(lic9_result)
     
@@ -51,6 +112,17 @@ class TestDecide(unittest.TestCase):
         decide.Y = [0, 3, 6, 3, 0]
         lic10_result = decide.LIC10()
         self.assertFalse(lic10_result)
+    
+    def test_LIC10_low_numpoints_False(self):
+        decide.NUMPOINTS = 4
+        decide.PARAMETERS["E_PTS"] = 1
+        decide.PARAMETERS["F_PTS"] = 1
+        decide.PARAMETERS["AREA1"] = 5
+        decide.X = [0, 1, 2, 3, 4]
+        decide.Y = [0, 3, 6, 3, 0]
+        lic10_result = decide.LIC10()
+        self.assertFalse(lic10_result)
+
 
     def test_LIC11_True(self):    
         decide.PARAMETERS["G_PTS"] = 2
@@ -68,8 +140,14 @@ class TestDecide(unittest.TestCase):
         lic11_result = decide.LIC11()
         self.assertFalse(lic11_result)
 
+    def test_LIC11_low_numpoints_False(self):
+        decide.PARAMETERS["G_PTS"] = 2
+        decide.NUMPOINTS = 2
+        decide.X = [1, 3, 3, 3, 2]
+        decide.Y = [2, 5, 1, 1, 1]
+        lic11_result = decide.LIC11()
+        self.assertFalse(lic11_result)
         
- 
     def test_LIC7_satisfied(self):
         """ Test if LIC7 is true when there exists a pair of points more than LENGTH1 units apart """
         decide.POINTS = [[0, 0], [1, 1], [2, 2], [4, 4]]
@@ -214,6 +292,34 @@ class TestDecide(unittest.TestCase):
         expected_outcome = [[True for _ in range(len(cmv))] for _ in range(len(cmv))]
 
         self.assertListEqual(expected_outcome, generated_outcome)
+
+    def test_launch_all_false(self):
+        FUV = []
+        for i in range(15):
+            FUV.append(False)
+        self.assertFalse(decide.launch(FUV))
+
+    def test_launch_last_true(self):
+        FUV = []
+        for i in range(14):
+            FUV.append(False)
+        FUV.append(True)
+        self.assertFalse(decide.launch(FUV))
+
+
+    def test_launch_first_true(self):
+        FUV = []
+        FUV.append(True)
+        for i in range(14):
+            FUV.append(False)
+        self.assertFalse(decide.launch(FUV))
+
+    def test_launch_all_true(self):
+        FUV = []
+        for i in range(15):
+            FUV.append(True)
+        self.assertTrue(decide.launch(FUV))
+
 
 if __name__ == '__main__':
     unittest.main()
