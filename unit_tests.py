@@ -83,6 +83,16 @@ class TestDecide(unittest.TestCase):
         lic9_result = decide.LIC9()
         self.assertFalse(lic9_result)
     
+    def test_LIC9_low_numpoints_False(self):
+        decide.NUMPOINTS = 2
+        decide.PARAMETERS["C_PTS"] = 1
+        decide.PARAMETERS["D_PTS"] = 1
+        decide.PARAMETERS["EPSILON"] = math.pi / 2
+        decide.X = [0, 1, 0, 2, 3]
+        decide.Y = [0, 2, 0, 3, 4]
+        lic9_result = decide.LIC9()
+        self.assertFalse(lic9_result)
+    
     def test_LIC10_True(self):
         decide.NUMPOINTS = 5
         decide.PARAMETERS["E_PTS"] = 1
@@ -102,6 +112,17 @@ class TestDecide(unittest.TestCase):
         decide.Y = [0, 3, 6, 3, 0]
         lic10_result = decide.LIC10()
         self.assertFalse(lic10_result)
+    
+    def test_LIC10_low_numpoints_False(self):
+        decide.NUMPOINTS = 4
+        decide.PARAMETERS["E_PTS"] = 1
+        decide.PARAMETERS["F_PTS"] = 1
+        decide.PARAMETERS["AREA1"] = 5
+        decide.X = [0, 1, 2, 3, 4]
+        decide.Y = [0, 3, 6, 3, 0]
+        lic10_result = decide.LIC10()
+        self.assertFalse(lic10_result)
+
 
     def test_LIC11_True(self):    
         decide.PARAMETERS["G_PTS"] = 2
@@ -119,8 +140,14 @@ class TestDecide(unittest.TestCase):
         lic11_result = decide.LIC11()
         self.assertFalse(lic11_result)
 
+    def test_LIC11_low_numpoints_False(self):
+        decide.PARAMETERS["G_PTS"] = 2
+        decide.NUMPOINTS = 2
+        decide.X = [1, 3, 3, 3, 2]
+        decide.Y = [2, 5, 1, 1, 1]
+        lic11_result = decide.LIC11()
+        self.assertFalse(lic11_result)
         
- 
     def test_LIC7_satisfied(self):
         """ Test if LIC7 is true when there exists a pair of points more than LENGTH1 units apart """
         decide.POINTS = [[0, 0], [1, 1], [2, 2], [4, 4]]
