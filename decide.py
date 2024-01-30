@@ -5,6 +5,7 @@ PUV = [True for _ in range(15)]
 # 1 = ANDD 
 # 2 = ORR
 LCM = []
+
 for row in range(14):    
     a = []
     for column in range(14):   
@@ -143,7 +144,10 @@ def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
 def LIC9():
     if NUMPOINTS < 5:
         return False
-    
+    assert 1 <= PARAMETERS["C_PTS"], "Assertion failed: 1 ≤ C_PTS"
+    assert 1 <= PARAMETERS["D_PTS"], "Assertion failed: 1 ≤ D_PTS"
+    assert PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] <= NUMPOINTS - 3, "Assertion failed: C_PTS + D_PTS ≤ NUMPOINTS − 3"
+
     for i in range(NUMPOINTS - PARAMETERS["C_PTS"] - PARAMETERS["D_PTS"] - 2):
         first_point_x = X[i]
         first_point_y = Y[i]
@@ -162,7 +166,10 @@ def LIC9():
 def LIC10():
     if NUMPOINTS < 5:
         return False
-    
+    assert 1 <= PARAMETERS["E_PTS"], "Assertion failed: 1 ≤ E_PTS"
+    assert 1 <= PARAMETERS["F_PTS"], "Assertion failed: 1 ≤ F_PTS"
+    assert PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] <= NUMPOINTS - 3, "Assertion failed: E_PTS + F_PTS ≤ NUMPOINTS − 3"
+
     for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
         first_point = i
         second_point = i + PARAMETERS["E_PTS"] + 1
@@ -175,6 +182,7 @@ def LIC10():
 def LIC11():
     if NUMPOINTS < 3:
         return False
+    assert 1 <= PARAMETERS["G_PTS"] <= NUMPOINTS - 2, "Assertion failed: 1 ≤ G_PTS ≤ NUMPOINTS−2"
 
     for i in range(NUMPOINTS - PARAMETERS["G_PTS"] - 1):
         if X[i + PARAMETERS["G_PTS"] + 1] - X[i] < 0:
@@ -229,9 +237,27 @@ def LIC8():
 
     return False
 
+
+# 0 = NOTUSED 
+# 1 = ANDD 
+# 2 = ORR
+def generate_PUM(cmv):
+    pum = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+    for i in range(len(cmv)):
+        for j in range(len(cmv)):
+            if LCM[i][j] == 0:
+                pum[i][j] = True
+            elif LCM[i][j] == 1:
+                pum[i][j] = cmv[i] and cmv[j]
+            elif LCM[i][j] == 2:
+                pum[i][j] = cmv[i] or cmv[j]
+
+    return pum
 # temporarily takes in FUV as a variable, will be removed once FUV is merged into main
 def launch(FUV):
     for i in FUV:
         if i == False:
             return False
     return True
+
