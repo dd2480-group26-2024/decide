@@ -117,6 +117,9 @@ def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
 def LIC9():
     if NUMPOINTS < 5 or PARAMETERS["C_PTS"] < 1 or PARAMETERS["D_PTS"] < 1 or PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] > NUMPOINTS - 3:
         return False
+    assert 1 <= PARAMETERS["C_PTS"], "Assertion failed: 1 ≤ C_PTS"
+    assert 1 <= PARAMETERS["D_PTS"], "Assertion failed: 1 ≤ D_PTS"
+    assert PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] <= NUMPOINTS - 3, "Assertion failed: C_PTS + D_PTS ≤ NUMPOINTS − 3"
 
     for i in range(NUMPOINTS - PARAMETERS["C_PTS"] - PARAMETERS["D_PTS"] - 2):
         first_point_x = X[i]
@@ -134,9 +137,12 @@ def LIC9():
     return False
         
 def LIC10():
-    if NUMPOINTS < 5 or PARAMETERS["E_PTS"] < 1 or PARAMETERS["F_PTS"] < 1 or PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] > NUMPOINTS - 3:
+    if NUMPOINTS < 5:
         return False
-    
+    assert 1 <= PARAMETERS["E_PTS"], "Assertion failed: 1 ≤ E_PTS"
+    assert 1 <= PARAMETERS["F_PTS"], "Assertion failed: 1 ≤ F_PTS"
+    assert PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] <= NUMPOINTS - 3, "Assertion failed: E_PTS + F_PTS ≤ NUMPOINTS − 3"
+
     for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
         first_point = i
         second_point = i + PARAMETERS["E_PTS"] + 1
@@ -147,8 +153,9 @@ def LIC10():
     return True
 
 def LIC11():
-    if NUMPOINTS < 5 or PARAMETERS["G_PTS"] < 1 or PARAMETERS["G_PTS"] > NUMPOINTS - 2:
+    if NUMPOINTS < 3:
         return False
+    assert 1 <= PARAMETERS["G_PTS"] <= NUMPOINTS - 2, "Assertion failed: 1 ≤ G_PTS ≤ NUMPOINTS−2"
 
     for i in range(NUMPOINTS - PARAMETERS["G_PTS"] - 1):
         if X[i + PARAMETERS["G_PTS"] + 1] - X[i] < 0:
