@@ -107,7 +107,7 @@ def LIC2():
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
 
-    return Falses
+    return False
 
 X = []
 Y = []
@@ -157,9 +157,11 @@ def LIC11():
 
   
 def LIC6():
-    if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
+    if NUMPOINTS < 3:
         return False
-
+    
+    assert 3 <= PARAMETERS["N_PTS"] <= NUMPOINTS, "Assertion failed: 3 ≤ N_PTS ≤ NUMPOINTS"
+    assert  0 <= PARAMETERS["DIST"], "Assertion failed: 0 ≤ DIST"
     for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
         subset = POINTS[i:i + PARAMETERS['N_PTS']]
         line_start, line_end = subset[0], subset[-1]
@@ -170,22 +172,28 @@ def LIC6():
     return False
 
 def LIC7():
-  if NUMPOINTS < 3 or not (1 <= PARAMETERS["K_PTS"] <= NUMPOINTS - 2):
-      return False
+    if NUMPOINTS < 3:
+        return False
+  
+    assert 1 <= PARAMETERS["K_PTS"] <= (NUMPOINTS - 2), "Assertion failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2)"
 
-  for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
-      p1 = POINTS[i]
-      p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
-      distance = calculate_distance(p1,p2)
-      if distance > PARAMETERS['LENGTH1']:
-          return True
+    for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
+        distance = calculate_distance(p1,p2)
+        if distance > PARAMETERS['LENGTH1']:
+            return True
 
-  return False
+    return False
 
 def LIC8():
-    
-    if NUMPOINTS < 5 or PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
+   
+    if NUMPOINTS < 5:
         return False
+    assert 1 <= PARAMETERS["A_PTS"], "Assertion failed: 1 ≤ A_PTS"
+    assert 1 <= PARAMETERS["B_PTS"], "Assertion failed: 1 ≤ B_PTS"
+    assert PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] <= (NUMPOINTS - 3), "Assertion failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"
+
     for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
         p1 = POINTS[i]
         p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]

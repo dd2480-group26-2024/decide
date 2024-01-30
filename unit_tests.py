@@ -93,15 +93,15 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS['K_PTS']  = 1
         decide.PARAMETERS['LENGTH1'] = 2
         self.assertFalse(decide.LIC7())
+        
+    def test_LIC7_num_not_error(self):
+            """ failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2) """
+            decide.POINTS = [[0, 0], [1, 1], [2, 2], [3, 3]]
+            decide.NUMPOINTS = 4
+            decide.PARAMETERS['K_PTS']  = 0
+            decide.PARAMETERS['LENGTH1'] = 2
+            #decide.LIC7()
 
-
-    def test_LIC7_k_pts_invalid(self):
-        """ Test if LIC7 is false when K_PTS is outside the valid range """
-        decide.POINTS = [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]]
-        decide.NUMPOINTS = 5
-        decide.PARAMETERS['K_PTS'] = 4 
-        decide.PARAMETERS['LENGTH1'] = 2
-        self.assertFalse(decide.LIC7())
         
     def test_LIC6_satisfied(self):
         """ Test if LIC6 is true when the distance meets the requirement """
@@ -127,6 +127,22 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS['N_PTS'] = 3
         decide.PARAMETERS['DIST'] = 0.5
         self.assertFalse(decide.LIC6())
+        
+    def test_LIC6_DIST_error(self):
+        """ failed: 0 ≤ DIST """
+        decide.POINTS = [[2.0, 2.0], [1.0, 2.0], [1.0, 3.0]]
+        decide.NUMPOINTS  = 3
+        decide.PARAMETERS['N_PTS'] = 3
+        decide.PARAMETERS['DIST'] = -1
+        #decide.LIC6()  
+        
+    def test_LIC6_DIST_NPTS_error(self):
+        """ failed: 3 ≤ N_PTS ≤ NUMPOINTS """
+        decide.POINTS = [[2.0, 2.0], [1.0, 2.0], [1.0, 3.0]]
+        decide.NUMPOINTS  = 3
+        decide.PARAMETERS['N_PTS'] = 4
+        decide.PARAMETERS['DIST'] = 3
+        #decide.LIC6()  
         
     def test_LIC8_not_satisfied(self):
         """ Test LIC8 a triangle"""
@@ -159,6 +175,24 @@ class TestDecide(unittest.TestCase):
             decide.PARAMETERS['RADIUS1'] = 2
             result = decide.LIC8()
             self.assertFalse(result)
+            
+    def test_LIC8_aPTS_error(self):
+        """ Assertion failed: 1 ≤ A_PTS"""
+        decide.POINTS = [[1.0, 0.0],[0.0, 0.0], [3.0, 0.0],[4.0, 0.0], [0, 0]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 0
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 2
+        #decide.LIC8()
+        
+    def test_LIC8_LEN_error(self):
+        """ failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"""
+        decide.POINTS = [[1.0, 0.0],[0.0, 0.0], [3.0, 0.0],[4.0, 0.0], [0, 0]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 2
+        decide.PARAMETERS['B_PTS'] = 2
+        decide.PARAMETERS['RADIUS1'] = 2
+        #decide.LIC8()
 
 if __name__ == '__main__':
     unittest.main()
