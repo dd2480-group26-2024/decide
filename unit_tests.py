@@ -11,6 +11,57 @@ class TestDecide(unittest.TestCase):
         lic0_result = decide.LIC0()
         self.assertTrue(lic0_result)
 
+    def test_LIC14_insufficient_points(self):
+        decide.POINTS = [[0,2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        self.assertFalse(decide.LIC14())
+    
+    
+    def test_LIC14_no_condition_met(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 25
+        decide.PARAMETERS["AREA2"] = 5
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+    
+    def test_LIC14_only_first_condition(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 10
+        decide.PARAMETERS["AREA2"] = 5
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+        
+    def test_LIC14_only_second_condition(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 20
+        decide.PARAMETERS["AREA2"] = 14
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+    
+    def test_LIC14_both_conditions(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 10
+        decide.PARAMETERS["AREA2"] = 15
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertTrue(decide.LIC14())
+
+    def test_LIC14_equal_areas(self):
+        decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["AREA"] = 17.5
+        decide.PARAMETERS["AREA2"] = 10
+        decide.PARAMETERS["E_PTS"] = 0
+        decide.PARAMETERS["F_PTS"] = 0
+        self.assertFalse(decide.LIC14())
+
 
     def test_LIC9_True(self):
         decide.NUMPOINTS = 5
@@ -172,6 +223,7 @@ class TestDecide(unittest.TestCase):
             FUV.append(False)
         FUV.append(True)
         self.assertFalse(decide.launch(FUV))
+
 
     def test_launch_first_true(self):
         FUV = []
