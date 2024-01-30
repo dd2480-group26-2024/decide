@@ -4,12 +4,18 @@ import math
 import random
 
 class TestDecide(unittest.TestCase):
-    def test_LIC0(self):
+    def test_LIC0_true(self):
         decide.PARAMETERS["LENGTH1"] = 1
         decide.POINTS = [[0,2], [2,0]]
         decide.NUMPOINTS = len(decide.POINTS)
         lic0_result = decide.LIC0()
         self.assertTrue(lic0_result)
+
+    def test_LIC0_false(self):
+        decide.PARAMETERS["LENGTH1"] = 3
+        decide.POINTS = [[0,2], [2,0]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        self.assertFalse(decide.LIC0())
 
     def test_LIC14_insufficient_points(self):
         decide.POINTS = [[0,2]]
