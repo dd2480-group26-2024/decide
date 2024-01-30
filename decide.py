@@ -194,3 +194,13 @@ def LIC8():
             return True
 
     return False
+
+def generate_FUV(PUM, PUV):
+    FUV = []
+    for i in range(len(PUM)):
+        true_rows = all(PUM[i][j] for j in range(len(PUM)) if j != i)
+        if not PUV[i] or true_rows:
+            FUV.append(True)
+        else:
+            FUV.append(False)
+    return FUV
