@@ -115,7 +115,7 @@ def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
     return abs(x1 * (y2-y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) * 0.5 > a1
 
 def LIC9():
-    if NUMPOINTS < 5 or PARAMETERS["C_PTS"] < 1 or PARAMETERS["D_PTS"] < 1 or PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] > NUMPOINTS - 3:
+    if NUMPOINTS < 5:
         return False
     assert 1 <= PARAMETERS["C_PTS"], "Assertion failed: 1 ≤ C_PTS"
     assert 1 <= PARAMETERS["D_PTS"], "Assertion failed: 1 ≤ D_PTS"
