@@ -238,6 +238,18 @@ def LIC8():
     return False
 
 
+
+def generate_FUV(PUM, PUV):
+    FUV = []
+    for i in range(len(PUM)):
+        true_rows = all(PUM[i][j] for j in range(len(PUM)) if j != i)
+        if not PUV[i] or true_rows:
+            FUV.append(True)
+        else:
+            FUV.append(False)
+    return FUV
+
+
 # 0 = NOTUSED 
 # 1 = ANDD 
 # 2 = ORR
@@ -254,6 +266,7 @@ def generate_PUM(cmv):
                 pum[i][j] = cmv[i] or cmv[j]
 
     return pum
+
 # temporarily takes in FUV as a variable, will be removed once FUV is merged into main
 def launch(FUV):
     for i in FUV:
