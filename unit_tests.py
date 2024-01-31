@@ -11,6 +11,22 @@ class TestDecide(unittest.TestCase):
         self.assertTrue(lic0_result)
 
 
+    def test_LIC3(self):
+       decide.PARAMETERS['AREA'] = 2
+       decide.POINTS = [[0, 0], [0, 0], [0, 4], [2, 5], [3, 7]]
+       self.assertTrue(decide.LIC3())
+
+    def test_LIC4(self):
+        decide.PARAMETERS['Q_PTS'] = 3
+        decide.PARAMETERS['QUADS'] = 2
+        decide.POINTS = [[0, 0], [-3, -5], [5, -4], [-2, 5], [3, 7]]
+        self.assertTrue(decide.LIC4())
+
+    def test_LIC5(self):
+        decide.POINTS = [[0, 0], [3, -5], [5, -4], [-2, 5], [3, 7]]
+        self.assertTrue(decide.LIC5())
+
+
     def test_LIC14_insufficient_points(self):
         decide.POINTS = [[0,2]]
         decide.NUMPOINTS = len(decide.POINTS)
@@ -527,6 +543,54 @@ class TestDecide(unittest.TestCase):
         self.assertTrue(decide.launch(FUV))
 
 
+    def test_LIC6_not_satisfied(self):
+        """ Test if LIC6 is false when the distance doesn't meet the requirement """
+        decide.POINTS = [[2.0, 2.0], [1.0, 2.0], [1.0, 3.0]]
+        decide.NUMPOINTS = 3
+        decide.PARAMETERS['N_PTS'] = 3
+        decide.PARAMETERS['DIST'] = 1
+        self.assertFalse(decide.LIC6())
+
+    def test_LIC6_num_not_satisfied(self):
+        """ Test if LIC6 is false when the number of points is less than 3 """
+        decide.POINTS = [[1.0, 1.0], [2.0, 2.0]]
+
+        decide.NUMPOINTS  = 2
+        decide.PARAMETERS['N_PTS'] = 3
+        decide.PARAMETERS['DIST'] = 0.5
+        self.assertFalse(decide.LIC6())
+
+    def test_LIC8_not_satisfied(self):
+        """ Test LIC8 a triangle"""
+        # Setup for triangle
+        decide.POINTS = [[0.0, 0.0],[0.0, 0.0], [3.0, 0.0],[0.0, 0.0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 2
+        result = decide.LIC8()
+
+        self.assertFalse(result)
+        
+    def test_LIC8_satisfied(self):
+        """ Test LIC8 a triangle"""
+        decide.POINTS = [[0.0, 0.0],[0.0, 0.0], [3.0, 0.0],[0.0, 0.0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 1.5
+        result = decide.LIC8()
+        self.assertTrue(result)
+
+    def test_LIC8_not_satisfied(self):
+            """ Test LIC8 on a straght line"""
+            decide.POINTS = [[1.0, 0.0],[0.0, 0.0], [3.0, 0.0],[4.0, 0.0], [0, 0]]
+            decide.NUMPOINTS = len(decide.POINTS)
+            decide.PARAMETERS['A_PTS'] = 1
+            decide.PARAMETERS['B_PTS'] = 1
+            decide.PARAMETERS['RADIUS1'] = 2
+            result = decide.LIC8()
+            self.assertFalse(result)
 
 if __name__ == '__main__':
     unittest.main()

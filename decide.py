@@ -37,9 +37,17 @@ PARAMETERS = {
 
 POINTS = []
 
-
-
 NUMPOINTS = len(POINTS)
+
+def circumradius(p1, p2, p3):
+    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
+    a = math.dist(p1, p2)
+    b = math.dist(p2, p3)
+    c = math.dist(p3, p1)
+    area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
+    radius = a * b * c / area
+    return radius
+
 
 
 
@@ -71,6 +79,7 @@ def calculate_angle(point1, point2, point3):
     return angle
 
 
+
 def calculate_triangle_area(point1, point2, point3):
     assert 2 == len(point1) == len(point2) == len(point3), "Incorrect format for a point. A point must have 2 coordinates."
     # Area of a triangle:  |(x2 - x1)(y3 - y1) - (x3 - x1)*(y2 - y1)| / 2
@@ -92,9 +101,24 @@ def circumradius(p1, p2, p3):
 def can_fit_in_circle(p1, p2, p3, radius):
     """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
     calculated_radius = circumradius(p1, p2, p3)
-    return calculated_radius <= radius  
 
-  
+    return calculated_radius <= radius
+
+def distance(p1, p2):
+    """ Calculate the Euclidean distance between two points. """
+    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+def distance_point_to_line(point, line_start, line_end):
+    """Calculates the distance from a point to a line defined by two points."""
+    
+    if line_start == line_end:
+        return math.sqrt((point[0] - line_start[0])**2 + (point[1] - line_start[1])**2)
+    
+    num = abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
+    den = math.sqrt((line_end[0] - line_start[0])**2 + (line_end[1] - line_start[1])**2)
+    return num / den
+
+
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
     
@@ -119,8 +143,63 @@ def LIC2():
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
-
     return False
+
+def LIC3():
+    ps = POINTS
+    while len(ps) >= 3:
+        # Setup the x_i and y_i coordinates of three consequtive points
+        point1 = ps[0]; x1=point1[0]; y1=point1[1]
+        point2 = ps[1]; x2=point2[0]; y2=point2[1]
+        point3 = ps[2]; x3=point3[0]; y3=point3[1]
+        # If the area of the three points is larger than AREA then we're done
+        if (0.5*abs(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))) > PARAMETERS["AREA"]:
+            return True
+        # Iterate by removing the head of points
+        ps = ps[1:]
+    return False
+
+def LIC4():
+    # Setup variables
+    ps = POINTS
+    quadrant=[False,False,False,False]
+    # Inner helper functions
+    def reset_quadrant():
+        for i in quadrant:
+            i = False
+    # Count how many quadrants have points
+    def count_quads():
+        q = 0
+        for i in quadrant:
+            if i == True:
+                q +=1
+        return q
+   # Main calculation
+    while len(ps) >= PARAMETERS["Q_PTS"]:
+        for p in ps[:PARAMETERS["Q_PTS"]]: # Reduce array to the first Q_PTS elements
+            x=p[0];y=p[1]
+            if x>=0 and y>=0: quadrant[0]=True    # lies in quadrant I
+            elif x<0 and y>=0: quadrant[1]=True   # lies in quadrant II
+            elif x<=0 and y<0: quadrant[2]=True   # lies in quadrant III
+            else: quadrant[3]=True                # lies in quadrant IV
+        if count_quads() > PARAMETERS["QUADS"]:
+            return True
+        reset_quadrant()
+        # Iterate by removing the head of points
+        ps = ps[1:]
+    return False
+
+def LIC5():
+    ps=POINTS
+    while len(ps) >= 2:
+        xi=ps[0][0];
+        xj=ps[1][0];
+        if xj - xi < 0:
+            return True
+        ps = ps[1:] # iterate by removing the head of points
+    return False
+
+
     
 def LIC12():
     if(NUMPOINTS < 3):
@@ -251,14 +330,12 @@ def LIC8():
     assert 1 <= PARAMETERS["A_PTS"], "Assertion failed: 1 ≤ A_PTS"
     assert 1 <= PARAMETERS["B_PTS"], "Assertion failed: 1 ≤ B_PTS"
     assert PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] <= (NUMPOINTS - 3), "Assertion failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"
-
     for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
         p1 = POINTS[i]
         p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
         p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
         if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
             return True
-
     return False
 
 
@@ -321,4 +398,3 @@ def launch(FUV):
         if i == False:
             return False
     return True
-
