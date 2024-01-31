@@ -1,7 +1,6 @@
 import unittest
 import decide
 import math
-import random
 
 class TestDecide(unittest.TestCase):
     def test_LIC0(self):
@@ -190,12 +189,12 @@ class TestDecide(unittest.TestCase):
         self.assertFalse(decide.LIC7())
         
     def test_LIC7_num_not_error(self):
-            """ failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2) """
-            decide.POINTS = [[0, 0], [1, 1], [2, 2], [3, 3]]
-            decide.NUMPOINTS = 4
-            decide.PARAMETERS['K_PTS']  = 0
-            decide.PARAMETERS['LENGTH1'] = 2
-            #decide.LIC7()
+        """ failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2) """
+        decide.POINTS = [[0, 0], [1, 1], [2, 2], [3, 3]]
+        decide.NUMPOINTS = 4
+        decide.PARAMETERS['K_PTS']  = 0
+        decide.PARAMETERS['LENGTH1'] = 2
+        self.assertRaises(AssertionError, decide.LIC7)
 
         
     def test_LIC6_satisfied(self):
@@ -229,7 +228,7 @@ class TestDecide(unittest.TestCase):
         decide.NUMPOINTS  = 3
         decide.PARAMETERS['N_PTS'] = 3
         decide.PARAMETERS['DIST'] = -1
-        #decide.LIC6()  
+        self.assertRaises(AssertionError, decide.LIC6)
         
     def test_LIC6_DIST_NPTS_error(self):
         """ failed: 3 ≤ N_PTS ≤ NUMPOINTS """
@@ -237,7 +236,8 @@ class TestDecide(unittest.TestCase):
         decide.NUMPOINTS  = 3
         decide.PARAMETERS['N_PTS'] = 4
         decide.PARAMETERS['DIST'] = 3
-        #decide.LIC6()  
+        self.assertRaises(AssertionError, decide.LIC6)
+
         
     def test_LIC8_not_satisfied(self):
         """ Test LIC8 a triangle"""
@@ -383,7 +383,7 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS['A_PTS'] = 0
         decide.PARAMETERS['B_PTS'] = 1
         decide.PARAMETERS['RADIUS1'] = 2
-        #decide.LIC8()
+        self.assertRaises(AssertionError, decide.LIC8)
         
     def test_LIC8_LEN_error(self):
         """ failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"""
@@ -392,17 +392,18 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS['A_PTS'] = 2
         decide.PARAMETERS['B_PTS'] = 2
         decide.PARAMETERS['RADIUS1'] = 2
-        #decide.LIC8()
+        self.assertRaises(AssertionError, decide.LIC8)
+
 
             
     def test_PUM_orr(self):
-        """Test with all LCM elements as ORR and two random CMV element as True."""
+        """Test with all LCM elements as ORR and two CMV element as True."""
         cmv = [False for _ in range(15)]
-        random_number_1 = random.randint(0, 6)
-        cmv[random_number_1] = True
+        first_value = 2
+        cmv[first_value] = True
         
-        random_number_2 = random.randint(7, 14)
-        cmv[random_number_2] = True
+        second_value = 8
+        cmv[second_value] = True
 
         decide.LCM = [[2 for _ in range(len(cmv))] for _ in range(len(cmv))]
 
@@ -410,32 +411,32 @@ class TestDecide(unittest.TestCase):
 
         expected_outcome = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
         for i in range(len(cmv)):
-            expected_outcome[i][random_number_1] = True
-            expected_outcome[random_number_1][i] = True
-            expected_outcome[i][random_number_2] = True
-            expected_outcome[random_number_2][i] = True
+            expected_outcome[i][first_value] = True
+            expected_outcome[first_value][i] = True
+            expected_outcome[i][second_value] = True
+            expected_outcome[second_value][i] = True
 
         self.assertListEqual(expected_outcome, generated_outcome)
 
 
     def test_PUM_andd(self):
-        """Test with all LCM elements as ANDD and two random CMV elements as True."""
+        """Test with all LCM elements as ANDD and two CMV elements as True."""
         cmv = [False for _ in range(15)]
-        random_number_1 = random.randint(0, 6)
-        random_number_2 = random.randint(7, 14)
+        first_value = 2
+        second_value = 8
 
-        cmv[random_number_1] = True
-        cmv[random_number_2] = True
+        cmv[first_value] = True
+        cmv[second_value] = True
       
         decide.LCM = [[1 for _ in range(len(cmv))] for _ in range(len(cmv))]
 
         generated_outcome = decide.generate_PUM(cmv)
 
         expected_outcome = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
-        for i in [random_number_1, random_number_2]:
+        for i in [first_value, second_value]:
             expected_outcome[i][i] = True
-        expected_outcome[random_number_1][random_number_2] = True
-        expected_outcome[random_number_2][random_number_1] = True
+        expected_outcome[first_value][second_value] = True
+        expected_outcome[second_value][first_value] = True
 
         self.assertListEqual(expected_outcome, generated_outcome)
 
