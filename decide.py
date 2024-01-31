@@ -1,10 +1,12 @@
 import math
+import itertools
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
 # 1 = ANDD 
 # 2 = ORR
 LCM = []
+
 for row in range(14):    
     a = []
     for column in range(14):   
@@ -95,12 +97,14 @@ def can_fit_in_circle(p1, p2, p3, radius):
   
 def LIC0():
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
+    
     for i in range(NUMPOINTS-1):
         if calculate_distance(POINTS[i], POINTS[i+1]) > PARAMETERS["LENGTH1"]:
             return True
     return False
 
 def LIC1():
+    assert PARAMETERS["RADIUS1"] >= 0, "RADIUS1 < 0"    
     for i in range(NUMPOINTS-2):
         distances = [calculate_distance(point1, point2) for (point1, point2) in itertools.combinations([POINTS[i],POINTS[i+1],POINTS[i+2]], 2)]
         if any(distance > 2 * PARAMETERS["RADIUS1"] for distance in distances):
@@ -108,12 +112,14 @@ def LIC1():
     return False
 
 def LIC2():
+    assert 0 <= PARAMETERS["EPSILON"] and PARAMETERS["EPSILON"] < math.pi, "EPSILON less than 0 or >= pi"
     for i in range(NUMPOINTS-2):
         if POINTS[i] == POINTS[i+1] or POINTS[i+2] == POINTS[i+1]:
             continue
         angle = calculate_angle(POINTS[i], POINTS[i+1], POINTS[i+2])
         if angle > math.pi + PARAMETERS["EPSILON"] or angle < math.pi - PARAMETERS["EPSILON"]:
             return True
+
     return False
     
 def LIC14():
@@ -142,7 +148,10 @@ def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
 def LIC9():
     if NUMPOINTS < 5:
         return False
-    
+    assert 1 <= PARAMETERS["C_PTS"], "Assertion failed: 1 ≤ C_PTS"
+    assert 1 <= PARAMETERS["D_PTS"], "Assertion failed: 1 ≤ D_PTS"
+    assert PARAMETERS["C_PTS"] + PARAMETERS["D_PTS"] <= NUMPOINTS - 3, "Assertion failed: C_PTS + D_PTS ≤ NUMPOINTS − 3"
+
     for i in range(NUMPOINTS - PARAMETERS["C_PTS"] - PARAMETERS["D_PTS"] - 2):
         first_point_x = X[i]
         first_point_y = Y[i]
@@ -161,7 +170,10 @@ def LIC9():
 def LIC10():
     if NUMPOINTS < 5:
         return False
-    
+    assert 1 <= PARAMETERS["E_PTS"], "Assertion failed: 1 ≤ E_PTS"
+    assert 1 <= PARAMETERS["F_PTS"], "Assertion failed: 1 ≤ F_PTS"
+    assert PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] <= NUMPOINTS - 3, "Assertion failed: E_PTS + F_PTS ≤ NUMPOINTS − 3"
+
     for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
         first_point = i
         second_point = i + PARAMETERS["E_PTS"] + 1
@@ -174,6 +186,7 @@ def LIC10():
 def LIC11():
     if NUMPOINTS < 3:
         return False
+    assert 1 <= PARAMETERS["G_PTS"] <= NUMPOINTS - 2, "Assertion failed: 1 ≤ G_PTS ≤ NUMPOINTS−2"
 
     for i in range(NUMPOINTS - PARAMETERS["G_PTS"] - 1):
         if X[i + PARAMETERS["G_PTS"] + 1] - X[i] < 0:
@@ -182,9 +195,11 @@ def LIC11():
 
   
 def LIC6():
-    if NUMPOINTS < 3 or PARAMETERS['N_PTS'] < 3 or PARAMETERS['N_PTS'] > NUMPOINTS:
+    if NUMPOINTS < 3:
         return False
-
+    
+    assert 3 <= PARAMETERS["N_PTS"] <= NUMPOINTS, "Assertion failed: 3 ≤ N_PTS ≤ NUMPOINTS"
+    assert  0 <= PARAMETERS["DIST"], "Assertion failed: 0 ≤ DIST"
     for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
         subset = POINTS[i:i + PARAMETERS['N_PTS']]
         line_start, line_end = subset[0], subset[-1]
@@ -195,22 +210,28 @@ def LIC6():
     return False
 
 def LIC7():
-  if NUMPOINTS < 3 or not (1 <= PARAMETERS["K_PTS"] <= NUMPOINTS - 2):
-      return False
+    if NUMPOINTS < 3:
+        return False
+  
+    assert 1 <= PARAMETERS["K_PTS"] <= (NUMPOINTS - 2), "Assertion failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2)"
 
-  for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
-      p1 = POINTS[i]
-      p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
-      distance = calculate_distance(p1,p2)
-      if distance > PARAMETERS['LENGTH1']:
-          return True
+    for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
+        distance = calculate_distance(p1,p2)
+        if distance > PARAMETERS['LENGTH1']:
+            return True
 
-  return False
+    return False
 
 def LIC8():
-    
-    if NUMPOINTS < 5 or PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] > NUMPOINTS - 3 or PARAMETERS["A_PTS"]<1 or PARAMETERS["B_PTS"]<1:
+   
+    if NUMPOINTS < 5:
         return False
+    assert 1 <= PARAMETERS["A_PTS"], "Assertion failed: 1 ≤ A_PTS"
+    assert 1 <= PARAMETERS["B_PTS"], "Assertion failed: 1 ≤ B_PTS"
+    assert PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] <= (NUMPOINTS - 3), "Assertion failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"
+
     for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
         p1 = POINTS[i]
         p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
@@ -219,6 +240,7 @@ def LIC8():
             return True
 
     return False
+
 
     
 def LIC13():
@@ -239,6 +261,38 @@ def LIC13():
         if condition_radius1 and condition_radius2:
             return True
     return False      
+
+
+
+
+
+def generate_FUV(PUM, PUV):
+    FUV = []
+    for i in range(len(PUM)):
+        true_rows = all(PUM[i][j] for j in range(len(PUM)) if j != i)
+        if not PUV[i] or true_rows:
+            FUV.append(True)
+        else:
+            FUV.append(False)
+    return FUV
+
+
+# 0 = NOTUSED 
+# 1 = ANDD 
+# 2 = ORR
+def generate_PUM(cmv):
+    pum = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
+
+    for i in range(len(cmv)):
+        for j in range(len(cmv)):
+            if LCM[i][j] == 0:
+                pum[i][j] = True
+            elif LCM[i][j] == 1:
+                pum[i][j] = cmv[i] and cmv[j]
+            elif LCM[i][j] == 2:
+                pum[i][j] = cmv[i] or cmv[j]
+
+    return pum
 
 
 # temporarily takes in FUV as a variable, will be removed once FUV is merged into main
