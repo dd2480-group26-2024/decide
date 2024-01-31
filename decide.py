@@ -122,6 +122,26 @@ def LIC2():
 
     return False
     
+def LIC12():
+    if(NUMPOINTS < 3):
+        return False
+    assert PARAMETERS["LENGTH2"] >= 0, "LENGTH2 is < 0"
+    
+    condition_length1 = False
+    condition_length2 = False
+    # Check the distance between every couple (POINTS[i] , POINTS[i + K_PTS + 1])
+    for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
+        distance = calculate_distance(POINTS[i], POINTS[i + PARAMETERS["K_PTS"] + 1])
+        if PARAMETERS["LENGTH1"] < distance:
+            condition_length1 = True
+        if distance < PARAMETERS["LENGTH2"]:
+            condition_length2 = True
+        if condition_length1 and condition_length2:
+            return True
+    return False
+        
+  
+    
 def LIC14():
     if NUMPOINTS < 5:
         return False

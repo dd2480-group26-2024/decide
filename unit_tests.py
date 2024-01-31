@@ -457,6 +457,28 @@ class TestDecide(unittest.TestCase):
             FUV.append(False)
         self.assertFalse(decide.launch(FUV))
 
+
+    def test_LIC12_insufficient_points(self):
+        decide.POINTS = [[0,2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        self.assertFalse(decide.LIC12())
+
+    def test_LIC12_no_condition_met(self):
+        decide.POINTS = [[0,2], [0,4], [0,6]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["LENGTH1"] = 10
+        decide.PARAMETERS["LENGTH2"] = 1
+        decide.PARAMETERS["K_PTS"] = 0
+        self.assertFalse(decide.LIC12())
+
+    def test_LIC12_only_first_condition(self):
+        decide.POINTS = [[0,2], [0,4], [0,6]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["LENGTH1"] = 1
+        decide.PARAMETERS["LENGTH2"] = 1
+        decide.PARAMETERS["K_PTS"] = 0
+        self.assertFalse(decide.LIC12())
+
     def test_launch_last_true(self):
         FUV = []
         for i in range(14):
@@ -464,6 +486,31 @@ class TestDecide(unittest.TestCase):
         FUV.append(True)
         self.assertFalse(decide.launch(FUV))
 
+
+    def test_LIC12_only_second_condition(self):
+        decide.POINTS = [[0,2], [0,4], [0,6]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["LENGTH1"] = 10
+        decide.PARAMETERS["LENGTH2"] = 10
+        decide.PARAMETERS["K_PTS"] = 0
+        self.assertFalse(decide.LIC12())
+
+    def test_LIC12_both_conditions(self):
+        decide.POINTS = [[0,2], [0,4], [0,6]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["LENGTH1"] = 1
+        decide.PARAMETERS["LENGTH2"] = 10
+        decide.PARAMETERS["K_PTS"] = 0
+        self.assertTrue(decide.LIC12())
+       
+    def test_LIC12_equal_lengths(self):
+        decide.POINTS = [[0,2], [0,4], [0,6]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS["LENGTH1"] = 2
+        decide.PARAMETERS["LENGTH2"] = 2
+        decide.PARAMETERS["K_PTS"] = 0
+        self.assertFalse(decide.LIC12())
+    
 
     def test_launch_first_true(self):
         FUV = []
