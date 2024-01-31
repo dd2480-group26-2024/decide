@@ -270,6 +270,65 @@ class TestDecide(unittest.TestCase):
             decide.PARAMETERS['RADIUS1'] = 2
             result = decide.LIC8()
             self.assertFalse(result)
+            
+    def test_LIC13_insufficient_points(self):
+        decide.POINTS = [[0,0]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        self.assertFalse(decide.LIC13())
+        
+    def test_LIC13_no_condition_met(self):
+        decide.POINTS = [[0, 0], [0, 0], [3, 0], [0, 0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 100
+        decide.PARAMETERS['RADIUS2'] = 0.1
+        self.assertFalse(decide.LIC13())
+        
+    def test_LIC13_only_first_condition_met(self):
+        decide.POINTS = [[0, 0], [0, 0], [3, 0], [0, 0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 0.1
+        decide.PARAMETERS['RADIUS2'] = 0.1
+        self.assertFalse(decide.LIC13())
+        
+    def test_LIC13_only_second_condition_met(self):
+        decide.POINTS = [[0, 0], [0, 0], [3, 0], [0, 0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 100
+        decide.PARAMETERS['RADIUS2'] = 100
+        self.assertFalse(decide.LIC13())
+        
+    def test_LIC13_both_conditions_met(self):
+        decide.POINTS = [[0, 0], [0, 0], [3, 0], [0, 0], [1, 2]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 0.1
+        decide.PARAMETERS['RADIUS2'] = 100
+        self.assertTrue(decide.LIC13())
+        
+    def test_LIC13_edge_case_first_condition(self):
+        decide.POINTS = [[0, 0], [0, 0], [4, 0], [0, 0], [4, 3]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 2.5
+        decide.PARAMETERS['RADIUS2'] = 100
+        self.assertFalse(decide.LIC13())
+        
+    def test_LIC13_edge_case_second_condition(self):
+        decide.POINTS = [[0, 0], [0, 0], [4, 0], [0, 0], [4, 3]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 0.1
+        decide.PARAMETERS['RADIUS2'] = 2.5
+        self.assertTrue(decide.LIC13())
 
     
     def test_FUV_1_false(self):
