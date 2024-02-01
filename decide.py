@@ -48,9 +48,6 @@ def circumradius(p1, p2, p3):
     radius = a * b * c / area
     return radius
 
-
-
-
 def distance_point_to_line(point, line_start, line_end):
     """Calculates the distance from a point to a line defined by two points."""
     
@@ -78,13 +75,10 @@ def calculate_angle(point1, point2, point3):
         
     return angle
 
-
-
 def calculate_triangle_area(point1, point2, point3):
     assert 2 == len(point1) == len(point2) == len(point3), "Incorrect format for a point. A point must have 2 coordinates."
     # Area of a triangle:  |(x2 - x1)(y3 - y1) - (x3 - x1)*(y2 - y1)| / 2
     return abs((point2[0] - point1[0])*(point3[1] - point1[1]) - (point3[0] - point1[0])*(point2[1] - point1[1])) / 2
-
 
 def circumradius(p1, p2, p3):
     """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
@@ -96,7 +90,6 @@ def circumradius(p1, p2, p3):
         return max(a,b,c)/2
     radius = a * b * c / area
     return radius
-
 
 def can_fit_in_circle(p1, p2, p3, radius):
     """    Checks if the triangle formed by three points can fit inside a circle of a given radius.     """
@@ -117,6 +110,9 @@ def distance_point_to_line(point, line_start, line_end):
     num = abs((line_end[1] - line_start[1]) * point[0] - (line_end[0] - line_start[0]) * point[1] + line_end[0] * line_start[1] - line_end[1] * line_start[0])
     den = math.sqrt((line_end[0] - line_start[0])**2 + (line_end[1] - line_start[1])**2)
     return num / den
+
+def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
+    return abs(x1 * (y2-y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) * 0.5 > a1
 
 
 def LIC0():
@@ -198,52 +194,53 @@ def LIC5():
             return True
         ps = ps[1:] # iterate by removing the head of points
     return False
-
-
-    
-def LIC12():
-    if(NUMPOINTS < 3):
-        return False
-    assert PARAMETERS["LENGTH2"] >= 0, "LENGTH2 is < 0"
-    
-    condition_length1 = False
-    condition_length2 = False
-    # Check the distance between every couple (POINTS[i] , POINTS[i + K_PTS + 1])
-    for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
-        distance = calculate_distance(POINTS[i], POINTS[i + PARAMETERS["K_PTS"] + 1])
-        if PARAMETERS["LENGTH1"] < distance:
-            condition_length1 = True
-        if distance < PARAMETERS["LENGTH2"]:
-            condition_length2 = True
-        if condition_length1 and condition_length2:
-            return True
-    return False
-        
   
+def LIC6():
+    if NUMPOINTS < 3:
+        return False
     
-def LIC14():
+    assert 3 <= PARAMETERS["N_PTS"] <= NUMPOINTS, "Assertion failed: 3 ≤ N_PTS ≤ NUMPOINTS"
+    assert  0 <= PARAMETERS["DIST"], "Assertion failed: 0 ≤ DIST"
+    for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
+        subset = POINTS[i:i + PARAMETERS['N_PTS']]
+        line_start, line_end = subset[0], subset[-1]
+
+        for point in subset:
+            if distance_point_to_line(point, line_start, line_end) > PARAMETERS['DIST']:
+                return True
+    return False
+
+def LIC7():
+    if NUMPOINTS < 3:
+        return False
+  
+    assert 1 <= PARAMETERS["K_PTS"] <= (NUMPOINTS - 2), "Assertion failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2)"
+
+    for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
+        distance = calculate_distance(p1,p2)
+        if distance > PARAMETERS['LENGTH1']:
+            return True
+
+    return False
+
+def LIC8():
     if NUMPOINTS < 5:
         return False
-    assert PARAMETERS["AREA2"] >= 0, "AREA2 must be non-negative"
-    
-    condition_area1 = False
-    condition_area2 = False
-    # Check area of triangle formed by points with index (i, i+E_PTS+1, i+ E_PTS+1 + F_PTS+1)
-    for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
-        area = calculate_triangle_area(POINTS[i], POINTS[i + PARAMETERS["E_PTS"] + 1], POINTS[i + PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] + 2])
-        if PARAMETERS["AREA1"] < area:
-            condition_area1 = True
-        if area < PARAMETERS["AREA2"]:
-            condition_area2 = True            
-        if condition_area1 and condition_area2:
+    assert 1 <= PARAMETERS["A_PTS"], "Assertion failed: 1 ≤ A_PTS"
+    assert 1 <= PARAMETERS["B_PTS"], "Assertion failed: 1 ≤ B_PTS"
+    assert PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] <= (NUMPOINTS - 3), "Assertion failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"
+    for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
+        p1 = POINTS[i]
+        p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
+        p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
+        if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
             return True
-    return False      
+    return False
 
 X = []
 Y = []
-def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
-    return abs(x1 * (y2-y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) * 0.5 > a1
-
 def LIC9():
     if NUMPOINTS < 5:
         return False
@@ -291,55 +288,25 @@ def LIC11():
         if X[i + PARAMETERS["G_PTS"] + 1] - X[i] < 0:
             return True
     return False
-
-  
-def LIC6():
-    if NUMPOINTS < 3:
-        return False
     
-    assert 3 <= PARAMETERS["N_PTS"] <= NUMPOINTS, "Assertion failed: 3 ≤ N_PTS ≤ NUMPOINTS"
-    assert  0 <= PARAMETERS["DIST"], "Assertion failed: 0 ≤ DIST"
-    for i in range(NUMPOINTS - PARAMETERS['N_PTS'] + 1):
-        subset = POINTS[i:i + PARAMETERS['N_PTS']]
-        line_start, line_end = subset[0], subset[-1]
-
-        for point in subset:
-            if distance_point_to_line(point, line_start, line_end) > PARAMETERS['DIST']:
-                return True
-    return False
-
-def LIC7():
-    if NUMPOINTS < 3:
+def LIC12():
+    if(NUMPOINTS < 3):
         return False
-  
-    assert 1 <= PARAMETERS["K_PTS"] <= (NUMPOINTS - 2), "Assertion failed: 1 ≤ K_PTS ≤ (NUMPOINTS − 2)"
-
+    assert PARAMETERS["LENGTH2"] >= 0, "LENGTH2 is < 0"
+    
+    condition_length1 = False
+    condition_length2 = False
+    # Check the distance between every couple (POINTS[i] , POINTS[i + K_PTS + 1])
     for i in range(NUMPOINTS - PARAMETERS["K_PTS"] - 1):
-        p1 = POINTS[i]
-        p2 = POINTS[i + PARAMETERS["K_PTS"] + 1]
-        distance = calculate_distance(p1,p2)
-        if distance > PARAMETERS['LENGTH1']:
+        distance = calculate_distance(POINTS[i], POINTS[i + PARAMETERS["K_PTS"] + 1])
+        if PARAMETERS["LENGTH1"] < distance:
+            condition_length1 = True
+        if distance < PARAMETERS["LENGTH2"]:
+            condition_length2 = True
+        if condition_length1 and condition_length2:
             return True
-
-    return False
-
-def LIC8():
+    return False        
    
-    if NUMPOINTS < 5:
-        return False
-    assert 1 <= PARAMETERS["A_PTS"], "Assertion failed: 1 ≤ A_PTS"
-    assert 1 <= PARAMETERS["B_PTS"], "Assertion failed: 1 ≤ B_PTS"
-    assert PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] <= (NUMPOINTS - 3), "Assertion failed: A_PTS + B_PTS ≤ (NUMPOINTS − 3)"
-    for i in range(NUMPOINTS - (PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2)):
-        p1 = POINTS[i]
-        p2 = POINTS[i + PARAMETERS["A_PTS"] + 1]
-        p3 = POINTS[i + PARAMETERS["A_PTS"] + PARAMETERS["B_PTS"] + 2]
-        if not can_fit_in_circle(p1, p2, p3, PARAMETERS["RADIUS1"]):
-            return True
-    return False
-
-
-    
 def LIC13():
     if(NUMPOINTS < 5):
         return False
@@ -358,9 +325,24 @@ def LIC13():
         if condition_radius1 and condition_radius2:
             return True
     return False      
-
-
-
+      
+def LIC14():
+    if NUMPOINTS < 5:
+        return False
+    assert PARAMETERS["AREA2"] >= 0, "AREA2 must be non-negative"
+    
+    condition_area1 = False
+    condition_area2 = False
+    # Check area of triangle formed by points with index (i, i+E_PTS+1, i+ E_PTS+1 + F_PTS+1)
+    for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
+        area = calculate_triangle_area(POINTS[i], POINTS[i + PARAMETERS["E_PTS"] + 1], POINTS[i + PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] + 2])
+        if PARAMETERS["AREA1"] < area:
+            condition_area1 = True
+        if area < PARAMETERS["AREA2"]:
+            condition_area2 = True            
+        if condition_area1 and condition_area2:
+            return True
+    return False      
 
 
 def generate_FUV(PUM, PUV):
@@ -372,7 +354,6 @@ def generate_FUV(PUM, PUV):
         else:
             FUV.append(False)
     return FUV
-
 
 # 0 = NOTUSED 
 # 1 = ANDD 
@@ -390,7 +371,6 @@ def generate_PUM(cmv):
                 pum[i][j] = cmv[i] or cmv[j]
 
     return pum
-
 
 # temporarily takes in FUV as a variable, will be removed once FUV is merged into main
 def launch(FUV):
