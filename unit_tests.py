@@ -12,9 +12,14 @@ class TestDecide(unittest.TestCase):
 
 
     def test_LIC3(self):
-       decide.PARAMETERS['AREA'] = 2
+       decide.PARAMETERS['AREA1'] = 2
        decide.POINTS = [[0, 0], [0, 0], [0, 4], [2, 5], [3, 7]]
        self.assertTrue(decide.LIC3())
+
+    def test_LIC3_AREA1_big(self):
+        decide.PARAMETERS['AREA1'] = 5
+        decide.POINTS = [[0, 0], [0, 0], [0, 4], [2, 5], [3, 7]]
+        self.assertFalse(decide.LIC3())
 
     def test_LIC4(self):
         decide.PARAMETERS['Q_PTS'] = 3
@@ -51,7 +56,7 @@ class TestDecide(unittest.TestCase):
     def test_LIC14_no_condition_met(self):
         decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
         decide.NUMPOINTS = len(decide.POINTS)
-        decide.PARAMETERS["AREA"] = 25
+        decide.PARAMETERS["AREA1"] = 25
         decide.PARAMETERS["AREA2"] = 5
         decide.PARAMETERS["E_PTS"] = 0
         decide.PARAMETERS["F_PTS"] = 0
@@ -60,7 +65,7 @@ class TestDecide(unittest.TestCase):
     def test_LIC14_only_first_condition(self):
         decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
         decide.NUMPOINTS = len(decide.POINTS)
-        decide.PARAMETERS["AREA"] = 10
+        decide.PARAMETERS["AREA1"] = 10
         decide.PARAMETERS["AREA2"] = 5
         decide.PARAMETERS["E_PTS"] = 0
         decide.PARAMETERS["F_PTS"] = 0
@@ -69,7 +74,7 @@ class TestDecide(unittest.TestCase):
     def test_LIC14_only_second_condition(self):
         decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
         decide.NUMPOINTS = len(decide.POINTS)
-        decide.PARAMETERS["AREA"] = 20
+        decide.PARAMETERS["AREA1"] = 20
         decide.PARAMETERS["AREA2"] = 14
         decide.PARAMETERS["E_PTS"] = 0
         decide.PARAMETERS["F_PTS"] = 0
@@ -78,7 +83,7 @@ class TestDecide(unittest.TestCase):
     def test_LIC14_both_conditions(self):
         decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
         decide.NUMPOINTS = len(decide.POINTS)
-        decide.PARAMETERS["AREA"] = 10
+        decide.PARAMETERS["AREA1"] = 10
         decide.PARAMETERS["AREA2"] = 15
         decide.PARAMETERS["E_PTS"] = 0
         decide.PARAMETERS["F_PTS"] = 0
@@ -87,7 +92,7 @@ class TestDecide(unittest.TestCase):
     def test_LIC14_equal_areas(self):
         decide.POINTS = [[0, 0], [-2, 4], [7, -3], [2, -3], [6, 1]]
         decide.NUMPOINTS = len(decide.POINTS)
-        decide.PARAMETERS["AREA"] = 17.5
+        decide.PARAMETERS["AREA1"] = 17.5
         decide.PARAMETERS["AREA2"] = 10
         decide.PARAMETERS["E_PTS"] = 0
         decide.PARAMETERS["F_PTS"] = 0
