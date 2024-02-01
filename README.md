@@ -19,4 +19,21 @@ Every member was actively involved in the project as a whole. We consistently en
 Each member adapted their use of Git and work schedules depending on their context and ensuring flexibility, and every deadline was met. The level of comfort with the practices also depended on how comfortable we were with Git. So it might varies a bit from one person to another. But everyone kept on improving and adapting their way of working until the final version.
 
 ### Statement of contributions
-TODO
+Rémi Grasset: 
+Wrote function LIC12, LIC13 and LIC14 with tests.
+Reviewed the pull requests during the second half of the project.
+
+Anton Bölenius:
+Wrote LIC0-2 and additional tests, took initiative in planning and delegation of work in the scheduled meetings. Helped bugfix LIC9-11.
+
+Toto Roomi: 
+Worked on the LIC conditions 3-5 and the launch function, as well as their tests. 
+
+Kerem Robin Yurt:
+Wrote functions: LIC9-11, FUV, and also  tests for those.
+Also wrote the PARAMETERS dictionary.
+
+Marcus Jakobsson:
+I did the LIC6-8, the circumradius function, PUV and the respective tests for my functions.
+
+To finilize the project everyone collaborated on the README, tests and DECIDE() function, as well as minor bug fixes. 
