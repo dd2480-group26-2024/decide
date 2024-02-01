@@ -345,7 +345,7 @@ def LIC14():
     return False      
 
 
-def generate_FUV(PUM, PUV):
+def generate_FUV(PUM):
     FUV = []
     for i in range(len(PUM)):
         true_rows = all(PUM[i][j] for j in range(len(PUM)) if j != i)
@@ -378,3 +378,28 @@ def launch(FUV):
         if i == False:
             return False
     return True
+
+def CMV():
+    cmv = []
+    cmv.append(LIC0())
+    cmv.append(LIC1())
+    cmv.append(LIC2())
+    cmv.append(LIC3())
+    cmv.append(LIC4())
+    cmv.append(LIC5())
+    cmv.append(LIC6())
+    cmv.append(LIC7())
+    cmv.append(LIC8())
+    cmv.append(LIC9())
+    cmv.append(LIC10())
+    cmv.append(LIC11())
+    cmv.append(LIC12())
+    cmv.append(LIC13())
+    cmv.append(LIC14())
+    return cmv
+
+def DECIDE():
+    cmv = CMV()
+    pum = generate_PUM(cmv)
+    fuv = generate_FUV(pum)
+    return launch(fuv)
