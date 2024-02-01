@@ -148,8 +148,8 @@ def LIC3():
         point1 = ps[0]; x1=point1[0]; y1=point1[1]
         point2 = ps[1]; x2=point2[0]; y2=point2[1]
         point3 = ps[2]; x3=point3[0]; y3=point3[1]
-        # If the area of the three points is larger than AREA then we're done
-        if (0.5*abs(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))) > PARAMETERS["AREA"]:
+        # If the area of the three points is larger than AREA1 then we're done
+        if (0.5*abs(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))) > PARAMETERS["AREA1"]:
             return True
         # Iterate by removing the head of points
         ps = ps[1:]
@@ -336,7 +336,7 @@ def LIC14():
     # Check area of triangle formed by points with index (i, i+E_PTS+1, i+ E_PTS+1 + F_PTS+1)
     for i in range(NUMPOINTS - PARAMETERS["E_PTS"] - PARAMETERS["F_PTS"] - 2):
         area = calculate_triangle_area(POINTS[i], POINTS[i + PARAMETERS["E_PTS"] + 1], POINTS[i + PARAMETERS["E_PTS"] + PARAMETERS["F_PTS"] + 2])
-        if PARAMETERS["AREA"] < area:
+        if PARAMETERS["AREA1"] < area:
             condition_area1 = True
         if area < PARAMETERS["AREA2"]:
             condition_area2 = True            
