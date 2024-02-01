@@ -105,8 +105,7 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS["C_PTS"] = 1
         decide.PARAMETERS["D_PTS"] = 1
         decide.PARAMETERS["EPSILON"] = math.pi / 2
-        decide.X = [0, 1, 0, 2, 3]
-        decide.Y = [0, 2, 0, 3, 4]
+        decide.POINTS=[[0, 0], [1,2], [0,0], [2,3], [3, 4]]
         lic9_result = decide.LIC9()
         self.assertTrue(lic9_result)
 
@@ -115,8 +114,7 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS["C_PTS"] = 1
         decide.PARAMETERS["D_PTS"]= 1
         decide.PARAMETERS["EPSILON"] = math.pi * 4 / 5
-        decide.X = [0, 1, 2, 3, 4]
-        decide.Y = [0, 1, 3, 1, 0]
+        decide.POINTS = [[0,0], [1,1], [2,3], [3,1], [4,0]]
         lic9_result = decide.LIC9()
         self.assertFalse(lic9_result)
     
@@ -125,8 +123,7 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS["C_PTS"] = 1
         decide.PARAMETERS["D_PTS"] = 1
         decide.PARAMETERS["EPSILON"] = math.pi / 2
-        decide.X = [0, 1, 0, 2, 3]
-        decide.Y = [0, 2, 0, 3, 4]
+        decide.POINTS = [[0, 0], [1,2], [0,0], [2,3], [3, 4]]
         lic9_result = decide.LIC9()
         self.assertFalse(lic9_result)
     
@@ -134,9 +131,8 @@ class TestDecide(unittest.TestCase):
         decide.NUMPOINTS = 5
         decide.PARAMETERS["E_PTS"] = 1
         decide.PARAMETERS["F_PTS"] = 1
-        decide.PARAMETERS["AREA1"] = 5
-        decide.X = [0, 1, 2, 3, 4]
-        decide.Y = [0, 3, 6, 3, 0]
+        decide.PARAMETERS["AREA1"] = 5        
+        decide.POINTS=[[0, 0], [1,3], [2,6], [3,3], [4, 0]]
         lic10_result = decide.LIC10()
         self.assertTrue(lic10_result)
         
@@ -145,8 +141,7 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS["E_PTS"] = 1
         decide.PARAMETERS["F_PTS"] = 1
         decide.PARAMETERS["AREA1"] = 12
-        decide.X = [0, 1, 2, 3, 4]
-        decide.Y = [0, 3, 6, 3, 0]
+        decide.POINTS = [[0, 0], [1,3], [2,6], [3,3], [4, 0]]
         lic10_result = decide.LIC10()
         self.assertFalse(lic10_result)
     
@@ -155,8 +150,7 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS["E_PTS"] = 1
         decide.PARAMETERS["F_PTS"] = 1
         decide.PARAMETERS["AREA1"] = 5
-        decide.X = [0, 1, 2, 3, 4]
-        decide.Y = [0, 3, 6, 3, 0]
+        decide.POINTS=[[0, 0], [1,3], [2,6], [3,3], [4, 0]]
         lic10_result = decide.LIC10()
         self.assertFalse(lic10_result)
 
@@ -164,24 +158,21 @@ class TestDecide(unittest.TestCase):
     def test_LIC11_True(self):    
         decide.PARAMETERS["G_PTS"] = 2
         decide.NUMPOINTS = 5
-        decide.X = [1, 3, 3, 3, 2]
-        decide.Y = [2, 5, 1, 1, 1]
+        decide.POINTS=[[1, 2], [3,5], [3,1], [3,1], [2, 1]]
         lic11_result = decide.LIC11()
         self.assertTrue(lic11_result)
 
     def test_LIC11_False(self):
         decide.PARAMETERS["G_PTS"] = 2
-        decide.NUMPOINTS = 5
-        decide.X = [1, 3, 3, 4, 5]
-        decide.Y = [2, 5, 1, 1, 1]
+        decide.NUMPOINTS = 5        
+        decide.POINTS=[[1,2], [3,5], [3,1], [4,1], [5, 1]]
         lic11_result = decide.LIC11()
         self.assertFalse(lic11_result)
 
     def test_LIC11_low_numpoints_False(self):
         decide.PARAMETERS["G_PTS"] = 2
         decide.NUMPOINTS = 2
-        decide.X = [1, 3, 3, 3, 2]
-        decide.Y = [2, 5, 1, 1, 1]
+        decide.POINTS = [[1,2], [3,5], [3,1], [3,1], [2,1]]
         lic11_result = decide.LIC11()
         self.assertFalse(lic11_result)
         
@@ -354,45 +345,46 @@ class TestDecide(unittest.TestCase):
     
     def test_FUV_1_false(self):
         """Example 1: Test FUV[0] is False because PUV[0] is True and PUM[0,1] and PUM[0,3] are False"""
+        decide.PUV = [True for _ in range(15)]
         PUM = [[False] * 15 for _ in range(15)]
-        FUV_result = decide.generate_FUV(PUM, decide.PUV)
+        FUV_result = decide.generate_FUV(PUM)
         self.assertFalse(FUV_result[0])
 
     def test_FUV_2_true(self):
         """Example 2: Test FUV[1] is True because PUV[1] is False"""
-        PUV = [False] * 15
+        decide.PUV = [False] * 15
         PUM = [[False] * 15 for _ in range(15)]
-        FUV_result = decide.generate_FUV(PUM, PUV)
+        FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[1])  # Test FUV[1] is True because PUV[1] is False
 
     def test_FUV_3_true(self):
         """Example 3: Test FUV[2] is True because PUV[2] is False and PUM[2,i] is True for all i != 2"""
-        PUV = [False] * 15
+        decide.PUV = [False] * 15
         PUM = [[False] * 15 for _ in range(15)]
-        FUV_result = decide.generate_FUV(PUM, PUV)
+        FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[2])
 
     def test_FUV_variations(self):
         """Test different variations of FUV based on PUV and PUM settings"""
-        PUV = [False] * 15
+        decide.PUV = [False] * 15
         PUM = [[False] * 15 for _ in range(15)]
 
         # Test case 1: PUV[1] is False and all PUM[1][i] are False, leading to FUV[1] being True
-        PUV[1] = False
-        FUV_result = decide.generate_FUV(PUM, PUV)
+        decide.PUV[1] = False
+        FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[1])
 
         # Test case 2: PUV[1] is True and all PUM[1][i] are False, leading to FUV[1] being False
-        PUV[1] = True
-        FUV_result = decide.generate_FUV(PUM, PUV)
+        decide.PUV[1] = True
+        FUV_result = decide.generate_FUV(PUM)
         self.assertFalse(FUV_result[1])
 
         # Test case 3: PUV[1] is False and all PUM[1][i] are True, leading to FUV[1] being True
-        PUV[1] = False
+        decide.PUV[1] = False
         for i in range(len(PUM[1])):
             PUM[1][i] = True
 
-        FUV_result = decide.generate_FUV(PUM, PUV)
+        FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[1])
 
             
@@ -596,6 +588,39 @@ class TestDecide(unittest.TestCase):
             decide.PARAMETERS['RADIUS1'] = 2
             result = decide.LIC8()
             self.assertFalse(result)
+
+
+  
+    
+    def test_CMV(self):
+        decide.POINTS = [[1.0, 0.0],[0.0, 0.0], [3.0, 0.0],[4.0, 0.0], [0, 0]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['LENGTH1'] = 1
+        decide.PARAMETERS['RADIUS1'] = 1
+        decide.PARAMETERS['EPSILON'] = 2
+        decide.PARAMETERS['AREA1']  = 2
+        decide.PARAMETERS['Q_PTS']  = 4
+        decide.PARAMETERS['QUADS']  = 1
+        decide.PARAMETERS['DIST']   = 4
+        decide.PARAMETERS['N_PTS']  = 3
+        decide.PARAMETERS['K_PTS']  = 1
+        decide.PARAMETERS['A_PTS']  = 1
+        decide.PARAMETERS['B_PTS']  = 1
+        decide.PARAMETERS['C_PTS']  = 1
+        decide.PARAMETERS['D_PTS']  = 1
+        decide.PARAMETERS['E_PTS']  = 1
+        decide.PARAMETERS['F_PTS']  = 1
+        decide.PARAMETERS['G_PTS'] = decide.NUMPOINTS-2
+        decide.PARAMETERS['LENGTH2'] = 3
+        decide.PARAMETERS['RADIUS2'] = 2
+        decide.PARAMETERS['AREA2'] = 5
+        try:
+            decide.CMV()
+        except Exception:
+            self.fail()
+
+        
+
 
 if __name__ == '__main__':
     unittest.main()
