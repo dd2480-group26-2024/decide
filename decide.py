@@ -81,10 +81,14 @@ def calculate_triangle_area(point1, point2, point3):
     return abs((point2[0] - point1[0])*(point3[1] - point1[1]) - (point3[0] - point1[0])*(point2[1] - point1[1])) / 2
 
 def circumradius(p1, p2, p3):
-    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
     a = math.dist(p1, p2)
     b = math.dist(p2, p3)
     c = math.dist(p3, p1)
+    
+    largest_angle = max([calculate_angle(p1,p2,p3), calculate_angle(p2,p3,p1), calculate_angle(p3,p1,p2)])
+    if largest_angle >= math.pi/2:
+        return max([a, b, c])/2
+    """    Calculates the radius of the circumcircle of a triangle defined by three points.     """
     area = math.sqrt((a+b+c)*(b+c-a)*(c+a-b)*(a+b-c))
     if area == 0:
         return max(a,b,c)/2
