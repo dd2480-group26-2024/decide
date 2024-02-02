@@ -2,6 +2,8 @@
 DECIDE is a program that is a part of an Anti Ballistic Missile system (ABM system). DECIDE will determine whether to launch an interceptor based on radar information.
 DECIDE combines the information of whether some conditions are met with a logical system to determine whether the interceptor will fire or not, the output in the end is a boolean signal.
 
+In order to run the program, specify the global parameters in the decide.py file. Then run the program by running calling DECIDE() in the main function.
+Then you can run the program by calling python3 decide.py 
 
 
 ### Reflection of way-of-working according to Essence checklist
