@@ -1,5 +1,6 @@
 import math
 import itertools
+
 PUV = [True for _ in range(15)]
 
 # 0 = NOTUSED 
@@ -116,10 +117,12 @@ def distance_point_to_line(point, line_start, line_end):
     return num / den
 
 def triangle_area_vs_area1(x1, y1, x2, y2, x3, y3, a1):
+    """Calculates the triangle area with coordinates and compares it with AREA1 in PARAMETERS"""
     return abs(x1 * (y2-y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) * 0.5 > a1
 
 
 def LIC0():
+    """There exists at least one set of two consecutive data points that are a distance greater than the length, LENGTH1, apart."""
     assert PARAMETERS["LENGTH1"] >= 0, "LENGTH1 is < 0"
     
     for i in range(NUMPOINTS-1):
@@ -128,6 +131,8 @@ def LIC0():
     return False
 
 def LIC1():
+    """There exists at least one set of three consecutive data points that cannot all be contained
+       within or on a circle of radius RADIUS1."""
     assert PARAMETERS["RADIUS1"] >= 0, "RADIUS1 < 0"    
     for i in range(NUMPOINTS-2):
         if not can_fit_in_circle(POINTS[i],POINTS[i+1], POINTS[i+2], PARAMETERS["RADIUS1"]):
@@ -135,6 +140,8 @@ def LIC1():
     return False
 
 def LIC2():
+    """Three consecutive points create an angle satisfying either angle < (π - EPSILON) or angle > (π + EPSILON),
+       with the middle point as the vertex. If the first or last point coincides with the vertex."""
     assert 0 <= PARAMETERS["EPSILON"] and PARAMETERS["EPSILON"] < math.pi, "EPSILON less than 0 or >= pi"
     for i in range(NUMPOINTS-2):
         if POINTS[i] == POINTS[i+1] or POINTS[i+2] == POINTS[i+1]:
@@ -145,6 +152,8 @@ def LIC2():
     return False
 
 def LIC3():
+    """Checks that there exists one set of three consecutive data points that are the vertices of a triangle
+       with area greater than AREA1."""
     ps = POINTS
     while len(ps) >= 3:
         # Setup the x_i and y_i coordinates of three consequtive points
@@ -159,6 +168,8 @@ def LIC3():
     return False
 
 def LIC4():
+    """Checks that there is at least one set of Q_PTS nr of consequtive data points that 
+       are inside more than QUADS nr of quadrants."""
     # Setup variables
     ps = POINTS
     quadrant=[False,False,False,False]
@@ -189,6 +200,8 @@ def LIC4():
     return False
 
 def LIC5():
+    """There exists at least one set of two consecutive data points, 
+        (X[i],Y[i]) and (X[j],Y[j]), such that X[j] - X[i] < 0"""
     ps=POINTS
     while len(ps) >= 2:
         xi=ps[0][0];
@@ -199,6 +212,9 @@ def LIC5():
     return False
   
 def LIC6():
+    """For at least three data points, some consecutive points, 
+       defined by N PTS, include at least one point lying a distance greater than DIST from the line joining the first and last points. 
+       If the first and last points coincide, the distance is measured from that point to all others in the set."""
     if NUMPOINTS < 3:
         return False
     
@@ -214,6 +230,9 @@ def LIC6():
     return False
 
 def LIC7():
+    """For a given set of at least three data points, there exists a condition where two points, 
+       separated by exactly K_PTS consecutive intervening points, 
+       are a distance greater than LENGTH1 apart"""
     if NUMPOINTS < 3:
         return False
   
@@ -229,6 +248,9 @@ def LIC7():
     return False
 
 def LIC8():
+    """There exists at least one set of three data points separated by exactly A_PTS and B_PTS
+       consecutive intervening points, respectively, that cannot be contained within or on a circle of
+       radius RADIUS1. The condition is not met when NUMPOINTS < 5."""
     if NUMPOINTS < 5:
         return False
     assert 1 <= PARAMETERS["A_PTS"], "Assertion failed: 1 ≤ A_PTS"
@@ -243,6 +265,9 @@ def LIC8():
     return False
 
 def LIC9():
+    """For a given set of at least five data points, 
+       there exists a condition where three points, with the second point as the vertex, 
+       form an angle such that it is either less than (π - EPSILON) or greater than (π + EPSILON)."""
     if NUMPOINTS < 5:
         return False
     assert 1 <= PARAMETERS["C_PTS"], "Assertion failed: 1 ≤ C_PTS"
@@ -265,6 +290,8 @@ def LIC9():
     return False
         
 def LIC10():
+    """For a given set of at least five data points, 
+       there exists a condition where three points form a triangle with an area greater than AREA1"""
     if NUMPOINTS < 5:
         return False
     assert 1 <= PARAMETERS["E_PTS"], "Assertion failed: 1 ≤ E_PTS"
@@ -281,6 +308,9 @@ def LIC10():
     return True
 
 def LIC11():
+    """For a given set of at least three data points, 
+       there exists a condition where two points separated by exactly G_PTS consecutive intervening points 
+       satisfy X[j] - X[i] < 0."""
     if NUMPOINTS < 3:
         return False
     assert 1 <= PARAMETERS["G_PTS"] <= NUMPOINTS - 2, "Assertion failed: 1 ≤ G_PTS ≤ NUMPOINTS−2"
@@ -291,6 +321,8 @@ def LIC11():
     return False
     
 def LIC12():
+    """For at least three data points, there's a condition where two points, 
+       separated by K_PTS, are either greater than LENGTH1 apart and less than LENGTH2 apart, satisfying 0 ≤ LENGTH2."""
     if(NUMPOINTS < 3):
         return False
     assert PARAMETERS["LENGTH2"] >= 0, "LENGTH2 is < 0"
@@ -309,6 +341,9 @@ def LIC12():
     return False        
    
 def LIC13():
+    """For at least five data points, there's a condition where two sets of three points, 
+       separated by A_PTS and B_PTS, respectively, 
+       satisfy being outside a circle of radius RADIUS1 and inside or on a circle of radius RADIUS2, with 0 ≤ RADIUS2."""
     if(NUMPOINTS < 5):
         return False
     assert PARAMETERS["RADIUS2"] >= 0, "RADIUS2 is < 0"
@@ -328,6 +363,9 @@ def LIC13():
     return False      
       
 def LIC14():
+    """For at least five data points, there's a condition where two sets of three points, 
+       separated by E_PTS and F_PTS, form triangles with areas greater than AREA1 and less than AREA2, 
+       respectively, with 0 ≤ AREA2."""
     if NUMPOINTS < 5:
         return False
     assert PARAMETERS["AREA2"] >= 0, "AREA2 must be non-negative"
@@ -347,6 +385,8 @@ def LIC14():
 
 
 def generate_FUV(PUM):
+    """The Final Unlocking Vector (FUV) is generated from the Preliminary Unlocking Matrix.
+       The input PUV indicates whether the corresponding LIC is to be considered as a factor in signaling interceptor launch."""
     FUV = []
     for i in range(len(PUM)):
         true_rows = all(PUM[i][j] for j in range(len(PUM)) if j != i)
@@ -360,6 +400,8 @@ def generate_FUV(PUM):
 # 1 = ANDD 
 # 2 = ORR
 def generate_PUM(cmv):
+    """The Conditions Met Vector (CMV) can now be used in conjunction with the Logical Connector
+       Matrix (LCM) to form the Preliminary Unlocking Matrix (PUM)."""
     pum = [[False for _ in range(len(cmv))] for _ in range(len(cmv))]
 
     for i in range(len(cmv)):
@@ -375,12 +417,16 @@ def generate_PUM(cmv):
 
 # temporarily takes in FUV as a variable, will be removed once FUV is merged into main
 def launch(FUV):
+    """The final launch/no launch decision is based on the FUV. The decision to launch requires that all
+       elements in the FUV be true"""
     for i in FUV:
         if i == False:
             return False
     return True
 
 def CMV():
+    """The Conditions Met Vector (CMV) should be set according to the results of these calculations, i.e.
+       the global array element CMV[i] should be set to true if and only if the ith LIC is met."""
     cmv = []
     cmv.append(LIC0())
     cmv.append(LIC1())
@@ -400,6 +446,7 @@ def CMV():
     return cmv
 
 def DECIDE():
+    """The main function that runs the program"""
     cmv = CMV()
     pum = generate_PUM(cmv)
     fuv = generate_FUV(pum)
