@@ -1,6 +1,8 @@
 import unittest
-import decide
 import math
+import sys
+sys.path.append('../src')
+import decide
 
 class TestDecide(unittest.TestCase):
     def test_LIC0(self):
