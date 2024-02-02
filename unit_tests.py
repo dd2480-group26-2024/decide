@@ -364,26 +364,31 @@ class TestDecide(unittest.TestCase):
         FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[2])
 
-    def test_FUV_variations(self):
-        """Test different variations of FUV based on PUV and PUM settings"""
+    def test_FUV_variation(self):
+        """ Test: PUV[1] is False and all PUM[1][i] are False, leading to FUV[1] being True"""
         decide.PUV = [False] * 15
         PUM = [[False] * 15 for _ in range(15)]
 
-        # Test case 1: PUV[1] is False and all PUM[1][i] are False, leading to FUV[1] being True
         decide.PUV[1] = False
         FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[1])
-
-        # Test case 2: PUV[1] is True and all PUM[1][i] are False, leading to FUV[1] being False
+        
+    def test_FUV_variation2(self):
+        """Test: PUV[1] is True and all PUM[1][i] are False, leading to FUV[1] being False"""
+        decide.PUV = [False] * 15
+        PUM = [[False] * 15 for _ in range(15)]
         decide.PUV[1] = True
         FUV_result = decide.generate_FUV(PUM)
         self.assertFalse(FUV_result[1])
 
-        # Test case 3: PUV[1] is False and all PUM[1][i] are True, leading to FUV[1] being True
+    def test_FUV_variation3(self):
+        """ Test: PUV[1] is False and all PUM[1][i] are True, leading to FUV[1] being True """
+
+        decide.PUV = [False] * 15
+        PUM = [[False] * 15 for _ in range(15)]
         decide.PUV[1] = False
         for i in range(len(PUM[1])):
             PUM[1][i] = True
-
         FUV_result = decide.generate_FUV(PUM)
         self.assertTrue(FUV_result[1])
 
