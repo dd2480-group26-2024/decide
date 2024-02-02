@@ -306,6 +306,16 @@ class TestDecide(unittest.TestCase):
         decide.PARAMETERS['RADIUS2'] = 0.1
         self.assertFalse(decide.LIC13())
         
+        
+    def test_LIC13_obtuse_triangle(self):
+        decide.POINTS = [[0, 0], [0, 0], [50, 0], [0, 0], [25, 1]]
+        decide.NUMPOINTS = len(decide.POINTS)
+        decide.PARAMETERS['A_PTS'] = 1
+        decide.PARAMETERS['B_PTS'] = 1
+        decide.PARAMETERS['RADIUS1'] = 0.1
+        decide.PARAMETERS['RADIUS2'] = 26
+        self.assertTrue(decide.LIC13())
+        
     def test_LIC13_only_second_condition_met(self):
         decide.POINTS = [[0, 0], [0, 0], [3, 0], [0, 0], [1, 2]]
         decide.NUMPOINTS = len(decide.POINTS)
